@@ -24,6 +24,14 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class LoggableApplication extends Application
 {
+    /**
+     * @inheritdoc
+     */
+    public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN')
+    {
+        parent::__construct($name, $version);
+    }
+
     protected function configureIO(InputInterface $input, OutputInterface $output)
     {
         parent::configureIO($input, $output);
