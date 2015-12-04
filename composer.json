@@ -19,7 +19,7 @@
         "symfony/console": "^3.0",
         "symfony/finder": "^3.0"
     },
-    "suggests"         : {
+    "suggest"         : {
         "symfony/console": "^3.0"
     },
     "autoload"         : {
