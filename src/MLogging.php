@@ -110,4 +110,15 @@ class MLogging
         return $record;
     }
 
+    public static function getExceptionDebugInfo(\Exception $exception)
+    {
+        return
+            "Exception info: " . $exception->getMessage()
+            . PHP_EOL
+            . ("code = " . $exception->getCode() . ", at " . $exception->getFile() . ":" . $exception->getLine())
+            . PHP_EOL
+            . $exception->getTraceAsString()
+            . PHP_EOL;
+    }
+
 }
