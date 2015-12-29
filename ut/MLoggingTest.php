@@ -1,4 +1,5 @@
 <?php
+use Monolog\Logger;
 use Oasis\Mlib\Logging\LocalErrorHandler;
 use Oasis\Mlib\Logging\LocalFileHandler;
 use Oasis\Mlib\Logging\MLogging;
@@ -20,6 +21,7 @@ class MLoggingTest extends PHPUnit_Framework_TestCase
         $this->path = sys_get_temp_dir() . "/$ts";
         (new LocalFileHandler($this->path))->install();
         (new LocalErrorHandler($this->path))->install();
+        MLogging::setMinLogLevel(Logger::DEBUG);
     }
 
     protected function tearDown()
@@ -68,13 +70,31 @@ class MLoggingTest extends PHPUnit_Framework_TestCase
     public function testSetLogLevel()
     {
         mdebug("cool");
-        MLogging::setMinLogLevel(\Monolog\Logger::INFO);
+        MLogging::setMinLogLevel(Logger::INFO);
         mdebug("Star");
         minfo("Lucky");
 
         $this->assertStringPatternInFile("/cool/", $this->getLogFile());
         $this->assertStringPatternNotInFile("/Star/", $this->getLogFile());
         $this->assertStringPatternInFile("/Lucky/", $this->getLogFile());
+    }
+
+    public function testFileTraceSwitch()
+    {
+        $filename = basename(__FILE__);
+
+        mdebug('jason');
+        $this->assertStringPatternInFile("/jason.*\\($filename\\:[0-9]+\\)\\s*$/", $this->getLogFile());
+        MLogging::setMinLogLevel(Logger::INFO);
+        mdebug('williams');
+        $this->assertStringPatternNotInFile("/williams.*\\($filename\\:[0-9]+\\)\\s*$/", $this->getLogFile());
+        minfo("sacramento");
+        $this->assertStringPatternInFile("/sacramento.*\\($filename\\:[0-9]+\\)\\s*$/", $this->getLogFile());
+        MLogging::setMinLogLevelForFileTrace(Logger::ERROR);
+        mwarning('williams');
+        $this->assertStringPatternNotInFile("/williams.*\\($filename\\:[0-9]+\\)\\s*$/", $this->getLogFile());
+        merror('williams');
+        $this->assertStringPatternInFile("/williams.*\\($filename\\:[0-9]+\\)\\s*$/", $this->getLogFile());
     }
 
     protected function getLogFile()

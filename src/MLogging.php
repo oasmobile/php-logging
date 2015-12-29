@@ -17,7 +17,8 @@ class MLogging
 {
     protected static $logger = null;
     /** @var HandlerInterface[] */
-    protected static $handlers = [];
+    protected static $handlers             = [];
+    protected static $minLevelForFileTrace = Logger::DEBUG;
 
     public static function addHandler(HandlerInterface $handler, $name = null)
     {
@@ -52,6 +53,10 @@ class MLogging
                 }
             }
         }
+
+        if ($namePattern === null) {
+            self::setMinLogLevelForFileTrace($level);
+        }
     }
 
     public static function log($level, $msg, ...$args)
@@ -73,25 +78,34 @@ class MLogging
         return self::$logger;
     }
 
+    public static function setMinLogLevelForFileTrace($level)
+    {
+        self::$minLevelForFileTrace = Logger::toMonologLevel($level);
+    }
+
     public static function lnProcessor(array $record)
     {
-        $callStack        = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 12);
-        $self_encountered = false;
-        foreach ($callStack as $trace) {
-            if (dirname($trace['file']) == __DIR__) {
-                $self_encountered = true;
-                continue;
-            }
-            elseif (!$self_encountered) {
-                continue;
-            }
-            if (!StringUtils::stringEndsWith($record['message'], "\n")) {
-                $record['message'] .= " ";
-            }
-            $record['message'] .= "(" . basename($trace['file']) . ":" . $trace['line'] . ")";
-            break;
-        }
         $record['channel'] = getmypid();
+        if ($record['level'] >= self::$minLevelForFileTrace) {
+            $callStack        = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 12);
+            $self_encountered = false;
+            foreach ($callStack as $trace) {
+                if (dirname($trace['file']) == __DIR__
+                    || ($trace['class'] == Logger::class && $trace['function'] == 'log')
+                ) {
+                    $self_encountered = true;
+                    continue;
+                }
+                elseif (!$self_encountered) {
+                    continue;
+                }
+                if (!StringUtils::stringEndsWith($record['message'], "\n")) {
+                    $record['message'] .= " ";
+                }
+                $record['message'] .= "(" . basename($trace['file']) . ":" . $trace['line'] . ")";
+                break;
+            }
+        }
 
         return $record;
     }

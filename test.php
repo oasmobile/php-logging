@@ -17,6 +17,9 @@ require_once __DIR__ . "/vendor/autoload.php";
 (new LocalFileHandler('/tmp'))->install();
 (new LocalErrorHandler('/tmp'))->install();
 
+MLogging::setMinLogLevelForFileTrace("warning");
+//MLogging::setMinLogLevel(Logger::INFO);
+
 MLogging::log(Logger::INFO, "hello world");
 MLogging::log(Logger::INFO, "Good day %1\$s %1\$d %2\$s", "john", "nash");
 
