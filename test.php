@@ -25,7 +25,8 @@ new \Oasis\Mlib\Logging\AwsSnsHandler(
         ],
         "arn:aws:sns:us-east-1:315771499375:alert-log"
     ),
-    "auto log handler alert!"
+    "new auto log handler alert!",
+    3
 )
 )->install();
 
