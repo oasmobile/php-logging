@@ -28,9 +28,9 @@ new \Oasis\Mlib\Logging\AwsSnsHandler(
     "new auto log handler alert!",
     3
 )
-)->install();
+)->enableAutoPublishingOnFatalError()->install();
 
-MLogging::setMinLogLevelForFileTrace("warning");
+//MLogging::setMinLogLevelForFileTrace("warning");
 //MLogging::setMinLogLevel(Logger::INFO);
 
 MLogging::log(Logger::INFO, "hello world");
@@ -42,5 +42,8 @@ mnotice("hook %s", "122");
 mwarning("hook %s", "122");
 //merror("hook %s", "122");
 //mcritical("hook %s", "122");
-malert("hook %s", "122");
+//malert("hook %s", "122");
 //memergency("hook %s", "122");
+
+$a = new ConsoleHandler();
+$a->lfjl();

@@ -23,9 +23,10 @@ class AwsSnsHandler extends AbstractHandler
     protected $publishLevel;
     protected $bufferLimit;
 
-    protected $buffer          = [];
-    protected $isBatchHandling = false;
-    protected $pendingPublish  = false;
+    protected $buffer                     = [];
+    protected $isBatchHandling            = false;
+    protected $pendingPublish             = false;
+    protected $autoPublishingOnFatalError = false;
 
     public function __construct(SnsPublisher $publisher,
                                 $subject,
@@ -64,6 +65,12 @@ class AwsSnsHandler extends AbstractHandler
 
         if ($record['level'] >= $this->publishLevel) {
             $this->pendingPublish = true;
+        }
+
+        if ($this->processors) {
+            foreach ($this->processors as $processor) {
+                $record = call_user_func($processor, $record);
+            }
         }
 
         $this->buffer[] = $record;
@@ -171,5 +178,36 @@ class AwsSnsHandler extends AbstractHandler
     public function setBufferLimit($bufferLimit)
     {
         $this->bufferLimit = $bufferLimit;
+    }
+
+    public function enableAutoPublishingOnFatalError()
+    {
+        $this->autoPublishingOnFatalError = true;
+
+        register_shutdown_function(
+            function () {
+                if ($this->autoPublishingOnFatalError) {
+                    $error = error_get_last();
+                    if ($error['type'] == E_ERROR) {
+                        MLogging::log(
+                            $this->publishLevel,
+                            "Auto publishing because fatal error occured: %s (%s:%d)",
+                            $error['message'],
+                            basename($error['file']),
+                            intval($error['line'])
+                        );
+                    }
+                }
+            }
+        );
+
+        return $this;
+    }
+
+    public function disableAutoPublishingOnFatalError()
+    {
+        $this->autoPublishingOnFatalError = false;
+
+        return $this;
     }
 }

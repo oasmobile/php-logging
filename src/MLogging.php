@@ -90,13 +90,15 @@ class MLogging
             $callStack        = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 12);
             $self_encountered = false;
             foreach ($callStack as $trace) {
-                if (dirname($trace['file']) == __DIR__
-                    || ($trace['class'] == Logger::class && $trace['function'] == 'log')
+                if (($trace['class'] == Logger::class && $trace['function'] == 'log')
                 ) {
                     $self_encountered = true;
                     continue;
                 }
                 elseif (!$self_encountered) {
+                    continue;
+                }
+                elseif (dirname($trace['file']) == __DIR__) {
                     continue;
                 }
                 if (!StringUtils::stringEndsWith($record['message'], "\n")) {
