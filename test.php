@@ -16,6 +16,18 @@ require_once __DIR__ . "/vendor/autoload.php";
 (new ConsoleHandler())->install();
 (new LocalFileHandler('/tmp'))->install();
 (new LocalErrorHandler('/tmp'))->install();
+(
+new \Oasis\Mlib\Logging\AwsSnsHandler(
+    new \Oasis\Mlib\AwsWrappers\SnsPublisher(
+        [
+            "profile" => "minhao",
+            "region"  => "us-east-1",
+        ],
+        "arn:aws:sns:us-east-1:315771499375:alert-log"
+    ),
+    "auto log handler alert!"
+)
+)->install();
 
 MLogging::setMinLogLevelForFileTrace("warning");
 //MLogging::setMinLogLevel(Logger::INFO);
@@ -29,5 +41,5 @@ mnotice("hook %s", "122");
 mwarning("hook %s", "122");
 //merror("hook %s", "122");
 //mcritical("hook %s", "122");
-//malert("hook %s", "122");
+malert("hook %s", "122");
 //memergency("hook %s", "122");

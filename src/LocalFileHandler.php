@@ -24,6 +24,7 @@ class LocalFileHandler extends StreamHandler
 
         $translation_table = [
             "%date%"   => date('Ymd'),
+            "%hour%"   => date('H'),
             "%script%" => basename($_SERVER['SCRIPT_FILENAME'], ".php"),
             "%pid%"    => getmypid(),
         ];
