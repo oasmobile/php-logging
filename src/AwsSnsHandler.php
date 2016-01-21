@@ -12,6 +12,7 @@ use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\AbstractHandler;
 use Monolog\Logger;
 use Oasis\Mlib\AwsWrappers\SnsPublisher;
+use Oasis\Mlib\Utils\CommonUtils;
 
 class AwsSnsHandler extends AbstractHandler
 {
@@ -186,6 +187,7 @@ class AwsSnsHandler extends AbstractHandler
 
         register_shutdown_function(
             function () {
+                CommonUtils::monitorMemoryUsage();
                 if ($this->autoPublishingOnFatalError) {
                     $error = error_get_last();
                     if ($error['type'] == E_ERROR) {
