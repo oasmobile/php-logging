@@ -12,6 +12,7 @@ use Bramus\Monolog\Formatter\ColoredLineFormatter;
 use Bramus\Monolog\Formatter\ColorSchemes\DefaultScheme;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Oasis\Mlib\Utils\CommonUtils;
 
 class ConsoleHandler extends StreamHandler
 {
@@ -34,6 +35,15 @@ class ConsoleHandler extends StreamHandler
         $colored_formatter->includeStacktraces();
 
         $this->setFormatter($colored_formatter);
+    }
+
+    public function isHandling(array $record)
+    {
+        if (!CommonUtils::isRunningFromCommandLine()) {
+            return false;
+        }
+
+        return parent::isHandling($record);
     }
     
 }

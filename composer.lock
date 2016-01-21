@@ -168,16 +168,16 @@
         },
         {
             "name": "oasis/utils",
-            "version": "v1.1.2",
+            "version": "v1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oasmobile/php-utils.git",
-                "reference": "e2ad8f2ec116f51186b955aa3e79dbe33d379b45"
+                "reference": "af6536d97af306f063b9f0b0839dd37633533ae2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oasmobile/php-utils/zipball/e2ad8f2ec116f51186b955aa3e79dbe33d379b45",
-                "reference": "e2ad8f2ec116f51186b955aa3e79dbe33d379b45",
+                "url": "https://api.github.com/repos/oasmobile/php-utils/zipball/af6536d97af306f063b9f0b0839dd37633533ae2",
+                "reference": "af6536d97af306f063b9f0b0839dd37633533ae2",
                 "shasum": ""
             },
             "require": {
@@ -203,7 +203,7 @@
                 }
             ],
             "description": "Various utility classes & functions",
-            "time": "2015-12-29 13:58:31"
+            "time": "2016-01-19 13:11:56"
         },
         {
             "name": "psr/log",
