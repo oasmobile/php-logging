@@ -19,7 +19,9 @@ class LocalErrorHandler extends FingersCrossedHandler
     public function __construct($path = null,
                                 $namePattern = "%date%/%script%.error",
                                 $level = Logger::DEBUG,
-                                $triggerLevel = Logger::ERROR)
+                                $triggerLevel = Logger::ERROR,
+                                $bufferLimit = 1000
+    )
     {
         $handler            = new LocalFileHandler($path, $namePattern, $level);
         $activationStrategy = new ErrorLevelActivationStrategy($triggerLevel);
@@ -27,7 +29,7 @@ class LocalErrorHandler extends FingersCrossedHandler
         parent::__construct(
             $handler,
             $activationStrategy,
-            0, /* buffer size, 0 means no limit */
+            $bufferLimit, /* buffer size, 0 means no limit */
             true, /* bubbles */
             false /* stop bufferring on strategy activated */
         );
