@@ -90,7 +90,10 @@ class MLogging
             $callStack        = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 12);
             $self_encountered = false;
             foreach ($callStack as $trace) {
-                if (($trace['class'] == Logger::class && $trace['function'] == 'log')
+                if (isset($trace['class'])
+                    && isset($trace['function'])
+                    && $trace['class'] == Logger::class
+                    && $trace['function'] == 'log'
                 ) {
                     $self_encountered = true;
                     continue;
@@ -98,13 +101,15 @@ class MLogging
                 elseif (!$self_encountered) {
                     continue;
                 }
-                elseif (dirname($trace['file']) == __DIR__) {
+                elseif (isset($trace['file']) && dirname($trace['file']) == __DIR__) {
                     continue;
                 }
                 if (!StringUtils::stringEndsWith($record['message'], "\n")) {
                     $record['message'] .= " ";
                 }
-                $record['message'] .= "(" . basename($trace['file']) . ":" . $trace['line'] . ")";
+                if (isset($trace['file']) && isset($trace['line'])) {
+                    $record['message'] .= "(" . basename($trace['file']) . ":" . $trace['line'] . ")";
+                }
                 break;
             }
         }
