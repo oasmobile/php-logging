@@ -67,7 +67,7 @@ class MLogging
         self::getLogger()->log($level, $msg);
     }
 
-    protected static function getLogger()
+    public static function getLogger()
     {
         if (self::$logger instanceof Logger) {
             return self::$logger;
