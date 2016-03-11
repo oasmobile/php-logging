@@ -36,10 +36,11 @@ class LocalFileHandler extends StreamHandler
         parent::__construct($path, $level);
 
         $datetime_format = "Ymd-His P";
-        $output_format   = "[%channel%] %datetime% | %level_name% | %message% \n"; // %context% %extra%
+        $output_format   = "[%channel%] %datetime% | %level_name% | %message%  %context% %extra%\n"; // %context% %extra%
         $line_formatter  = new LineFormatter(
             $output_format,
             $datetime_format,
+            true,
             true
         );
         $line_formatter->includeStacktraces();
