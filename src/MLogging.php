@@ -89,7 +89,14 @@ class MLogging
         if ($record['level'] >= self::$minLevelForFileTrace) {
             $callStack        = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 12);
             $self_encountered = false;
+            $last_file        = '';
+            $last_line        = 0;
             foreach ($callStack as $trace) {
+                if (isset($trace['file']) && isset($trace['line'])) {
+                    $last_file = $trace['file'];
+                    $last_line = $trace['line'];
+                }
+
                 if (isset($trace['class'])
                     && isset($trace['function'])
                     && $trace['class'] == Logger::class
@@ -107,8 +114,8 @@ class MLogging
                 if (!StringUtils::stringEndsWith($record['message'], "\n")) {
                     $record['message'] .= " ";
                 }
-                if (isset($trace['file']) && isset($trace['line'])) {
-                    $record['message'] .= "(" . basename($trace['file']) . ":" . $trace['line'] . ")";
+                if ($last_file && $last_line) {
+                    $record['message'] .= "(" . basename($last_file) . ":" . $last_line . ")";
                 }
                 break;
             }

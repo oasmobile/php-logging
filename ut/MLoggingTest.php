@@ -97,6 +97,14 @@ class MLoggingTest extends PHPUnit_Framework_TestCase
         $this->assertStringPatternInFile("/williams.*\\($filename\\:[0-9]+\\)\\s*$/", $this->getLogFile());
     }
 
+    public function testContext()
+    {
+        $filename = basename(__FILE__);
+
+        MLogging::getLogger()->log('debug', "mark", ['abc' => 'xyz']);
+        $this->assertStringPatternInFile("/mark.*\\($filename\\:[0-9]+\\).*abc.*xyz.*$/", $this->getLogFile());
+    }
+
     protected function getLogFile()
     {
         $finder = new Symfony\Component\Finder\Finder();
@@ -146,4 +154,5 @@ class MLoggingTest extends PHPUnit_Framework_TestCase
         }
         $this->assertTrue(!$found, "Pattern $str should not be found in log file $file!");
     }
+
 }
