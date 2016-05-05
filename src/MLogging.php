@@ -100,7 +100,24 @@ class MLogging
                 if (isset($trace['class'])
                     && isset($trace['function'])
                     && $trace['class'] == Logger::class
-                    && $trace['function'] == 'log'
+                    && in_array(
+                        $trace['function'],
+                        [
+                            'log',
+                            'debug',
+                            'info',
+                            'notice',
+                            'warning',
+                            'error',
+                            'emergency',
+                            'alert',
+                            'critical',
+                            'warn',
+                            'err',
+                            'crit',
+                            'emerg',
+                        ]
+                    )
                 ) {
                     $self_encountered = true;
                     continue;
@@ -111,6 +128,7 @@ class MLogging
                 elseif (isset($trace['file']) && dirname($trace['file']) == __DIR__) {
                     continue;
                 }
+
                 if (!StringUtils::stringEndsWith($record['message'], "\n")) {
                     $record['message'] .= " ";
                 }

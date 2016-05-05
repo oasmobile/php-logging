@@ -83,6 +83,10 @@ class MLoggingTest extends PHPUnit_Framework_TestCase
     {
         $filename = basename(__FILE__);
 
+        MLogging::getLogger()->log('debug', 'chris');
+        $this->assertStringPatternInFile("/chris.*\\($filename\\:[0-9]+\\)\\s*$/", $this->getLogFile());
+        MLogging::getLogger()->notice('webber');
+        $this->assertStringPatternInFile("/webber.*\\($filename\\:[0-9]+\\)\\s*$/", $this->getLogFile());
         mdebug('jason');
         $this->assertStringPatternInFile("/jason.*\\($filename\\:[0-9]+\\)\\s*$/", $this->getLogFile());
         MLogging::setMinLogLevel(Logger::INFO);
