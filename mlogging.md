@@ -3,7 +3,7 @@
 ## just a second level header
 ### SAN
 #### 4th level ####
-##### 5th <a id='fifth'></a>
+##### 5th
 
 `mono spaced`
 
@@ -56,7 +56,9 @@ class Hello
 
 we go to [lol][LOL]
 
-this refer to [5th] (#fifth)
+this refer to [5th] (#5th)
+
+a header at [wow] (#san)
 
 
 ---
