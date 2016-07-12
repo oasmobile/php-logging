@@ -11,6 +11,7 @@ namespace Oasis\Mlib\Logging;
 use Monolog\Handler\AbstractHandler;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
+use Oasis\Mlib\Utils\CommonUtils;
 use Oasis\Mlib\Utils\StringUtils;
 
 class MLogging
@@ -63,6 +64,14 @@ class MLogging
     {
         if ($args) {
             $msg = vsprintf($msg, $args);
+        }
+        if (!self::getLogger()->getHandlers()) {
+            if (CommonUtils::isRunningFromCommandLine()) {
+                (new ConsoleHandler())->install();
+            }
+            else {
+                (new LocalFileHandler())->install();
+            }
         }
         self::getLogger()->log($level, $msg);
     }
