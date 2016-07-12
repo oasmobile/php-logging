@@ -1,8 +1,8 @@
-# oasis/logging - logging for Oasis projects
+# MLogger - logging for Oasis projects
 
 oasis/logging provides classes and functions used to write logs.
 
-The component can be referred to as MLog or MLogger in short.
+The component can be referred to as **MLog** or **MLogger** in short.
 
 There are a list of log handlers provided by default:
 
@@ -17,7 +17,7 @@ as its underlying implementation.
 
 ## Installation
 
-Install the latest version with
+Install the latest version with command below:
 
 ```bash
 $ composer require oasis/logging
@@ -49,8 +49,8 @@ mdebug("The object %s is being processed", $name);
 
 ## Using the Logger directly
 
-A Monolog\Logger can be used directly. This provides the freedom to
-integrate MLog with other PSR-3 compatible components who need logging
+A `Monolog\Logger` can be used directly. This provides the freedom to
+integrate MLog with other [PSR-3] compatible components who need logging
 tools.
 
 ```php
@@ -93,11 +93,14 @@ MLogging::addHandler(new ConsoleHandler());
 
 ## Using AWS SNS to auto handle alert
 
-The `Oasis\Mlib\Logging\AwsSnsHandler` is an especially useful tool
-under production environment. It buffers all the logs and discard them
-if the script exits without error. If anything like a fatal error has
-put the script to exit abnormally, the hanler will publish all the
-buffer as well as an ALERT log to the specified AWS SNS topic.
+The `Oasis\Mlib\Logging\AwsSnsHandler` provides a handler which is only
+processed when log above certain level (default to ALERT) is triggered.
+
+It is an especially useful tool under production environment. It buffers
+all the logs and discard them if the script exits without error. If
+anything like a fatal error has put the script to exit abnormally, the
+handler will publish all the buffer as well as an ALERT log to the
+specified [AWS SNS] topic.
 
 The AwsSnsHandler is an optional feature and it depends on the
 [oasis/aws-wrappers] component:
@@ -127,3 +130,4 @@ $snsHandler->install();
 [PSR-3]: http://www.php-fig.org/psr/psr-3/
 [monolog/monolog]: https://github.com/Seldaek/monolog
 [oasis/aws-wrappers]: https://github.com/oasmobile/php-aws-wrappers
+[AWS SNS]: http://docs.aws.amazon.com/sns/latest/dg/GettingStarted.html
