@@ -23,6 +23,8 @@ trait MLoggingHandlerTrait
     {
         if ($this instanceof HandlerInterface) {
             MLogging::addHandler($this, static::class);
+            
+            return $this;
         }
         else {
             throw new \LogicException("Installed logging handler is not of correct type! class = " . static::class);

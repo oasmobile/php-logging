@@ -8,147 +8,113 @@
 
 namespace Oasis\Mlib\Logging;
 
-use Monolog\Formatter\LineFormatter;
-use Monolog\Handler\AbstractHandler;
+use Monolog\Handler\AbstractProcessingHandler;
+use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
-use Oasis\Mlib\AwsWrappers\SnsPublisher;
 use Oasis\Mlib\Utils\CommonUtils;
 
-class AwsSnsHandler extends AbstractHandler
+/**
+ * Class ShutdownFallbackHandler
+ *
+ * This handler will fallback to the fallback-handler passed in, when:
+ * - the desired fallback level is triggered
+ * OR
+ * - the program shuts down with error
+ *
+ * When publishing to the fallback-handler, this handler will fallback all the bufferred records together
+ *
+ */
+class ShutdownFallbackHandler extends AbstractProcessingHandler
 {
     use MLoggingHandlerTrait;
-
-    /** @var SnsPublisher */
-    protected $publisher;
-    protected $subject;
+    
     protected $publishLevel;
     protected $bufferLimit;
-
-    protected $buffer                     = [];
+    
+    /** @var  \SplQueue */
+    protected $buffer;
     protected $isBatchHandling            = false;
     protected $pendingPublish             = false;
-    protected $autoPublishingOnFatalError = false;
-
-    public function __construct(SnsPublisher $publisher,
-                                $subject,
+    protected $autoPublishingOnFatalError = true;
+    /**
+     * @var HandlerInterface
+     */
+    private $fallbackHandler;
+    
+    public function __construct(HandlerInterface $fallbackHandler,
                                 $bufferLimit = 100,
                                 $publishLevel = Logger::ALERT,
                                 $level = Logger::DEBUG,
                                 $bubble = true)
     {
         parent::__construct($level, $bubble);
-
-        $this->publisher    = $publisher;
-        $this->subject      = $subject;
-        $this->publishLevel = $publishLevel;
-        $this->bufferLimit  = intval($bufferLimit);
-
-        $datetime_format = "Ymd-His P";
-        $output_format   = "[%channel%] %datetime% | %level_name% | %message% \n"; // %context% %extra%
-        $line_formatter  = new LineFormatter(
-            $output_format,
-            $datetime_format,
-            true
-        );
-        $line_formatter->includeStacktraces();
-
-        $this->setFormatter($line_formatter);
+        
+        $this->fallbackHandler = $fallbackHandler;
+        $this->publishLevel    = $publishLevel;
+        $this->bufferLimit     = intval($bufferLimit);
+        
+        $this->buffer = new \SplQueue();
+        
+        $this->enableAutoPublishingOnFatalError();
     }
-
+    
+    function __destruct()
+    {
+        $this->disableAutoPublishingOnFatalError();
+    }
+    
     /**
      * @inheritdoc
      */
-    public function handle(array $record)
+    public function write(array $record)
     {
         if ($record['level'] < $this->level) {
             return false;
         }
-
+        
         if ($record['level'] >= $this->publishLevel) {
             $this->pendingPublish = true;
         }
-
-        if ($this->processors) {
-            foreach ($this->processors as $processor) {
-                $record = call_user_func($processor, $record);
-            }
+        
+        $this->buffer->push($record);
+        while ($this->bufferLimit > 0 && $this->buffer->count() > $this->bufferLimit) {
+            $this->buffer->shift();
         }
-
-        $this->buffer[] = $record;
-        while ($this->bufferLimit > 0 && count($this->buffer) > $this->bufferLimit) {
-            array_shift($this->buffer);
-        }
-
+        
         if ($this->pendingPublish && !$this->isBatchHandling) {
-            $this->publish();
+            $this->fallback();
         }
-
+        
         return false;
     }
-
+    
     public function handleBatch(array $records)
     {
         $this->isBatchHandling = true;
         parent::handleBatch($records);
         $this->isBatchHandling = false;
+        
         if ($this->pendingPublish) {
-            $this->publish();
+            $this->fallback();
         }
     }
-
-    public function publish()
+    
+    public function fallback()
     {
         if (!$this->pendingPublish) {
             return;
         }
-
-        $body = '';
-        foreach ($this->buffer as &$record) {
-            $body .= $this->getFormatter()->format($record);
+        
+        $batch = [];
+        foreach ($this->buffer as $record) {
+            $batch[] = $record;
         }
-
-        $this->publisher->publish(
-            $this->subject,
-            $body
-        );
-
-        $this->buffer = [];
-
+        $this->fallbackHandler->handleBatch($batch);
+        
+        $this->buffer         = new \SplQueue();
         $this->pendingPublish = false;
     }
-
-    /**
-     * @return SnsPublisher
-     */
-    public function getPublisher()
-    {
-        return $this->publisher;
-    }
-
-    /**
-     * @param SnsPublisher $publisher
-     */
-    public function setPublisher($publisher)
-    {
-        $this->publisher = $publisher;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSubject()
-    {
-        return $this->subject;
-    }
-
-    /**
-     * @param mixed $subject
-     */
-    public function setSubject($subject)
-    {
-        $this->subject = $subject;
-    }
-
+    
     /**
      * @return int
      */
@@ -156,7 +122,7 @@ class AwsSnsHandler extends AbstractHandler
     {
         return $this->publishLevel;
     }
-
+    
     /**
      * @param int $publishLevel
      */
@@ -164,7 +130,7 @@ class AwsSnsHandler extends AbstractHandler
     {
         $this->publishLevel = $publishLevel;
     }
-
+    
     /**
      * @return int
      */
@@ -172,7 +138,7 @@ class AwsSnsHandler extends AbstractHandler
     {
         return $this->bufferLimit;
     }
-
+    
     /**
      * @param int $bufferLimit
      */
@@ -180,17 +146,18 @@ class AwsSnsHandler extends AbstractHandler
     {
         $this->bufferLimit = $bufferLimit;
     }
-
+    
     public function enableAutoPublishingOnFatalError()
     {
         $this->autoPublishingOnFatalError = true;
-
+        
         register_shutdown_function(
             function () {
                 CommonUtils::monitorMemoryUsage();
                 if ($this->autoPublishingOnFatalError) {
                     $error = error_get_last();
                     if ($error['type'] == E_ERROR) {
+                        /** @noinspection PhpParamsInspection */
                         MLogging::log(
                             $this->publishLevel,
                             "Auto publishing because fatal error occured: %s (%s:%d)",
@@ -202,14 +169,15 @@ class AwsSnsHandler extends AbstractHandler
                 }
             }
         );
-
+        
         return $this;
     }
-
+    
     public function disableAutoPublishingOnFatalError()
     {
         $this->autoPublishingOnFatalError = false;
-
+        
         return $this;
     }
+    
 }

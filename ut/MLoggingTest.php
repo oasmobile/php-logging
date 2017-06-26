@@ -76,7 +76,7 @@ class MLoggingTest extends PHPUnit_Framework_TestCase
         mdebug("abc");
         mwarning("efg");
         
-        $this->setExpectedException(LogicException::class);
+        $this->expectException(LogicException::class);
         $this->assertStringPatternNotInFile('/abc/', $this->getErrorFile());
     }
     

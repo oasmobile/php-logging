@@ -21,7 +21,7 @@
     },
     "suggest"          : {
         "symfony/console"   : "^3.0",
-        "oasis/aws-wrappers": "^1.1"
+        "oasis/aws-wrappers": "^2.7"
     },
     "autoload"         : {
         "psr-4": {
