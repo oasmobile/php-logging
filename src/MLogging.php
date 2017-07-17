@@ -16,10 +16,45 @@ use Oasis\Mlib\Utils\StringUtils;
 
 class MLogging
 {
-    protected static $logger = null;
+    protected static $logger                     = null;
+    protected static $autoPublishingOnFatalError = false;
+    protected static $autoPublisherRegistered    = false;
+    
     /** @var HandlerInterface[] */
     protected static $handlers             = [];
     protected static $minLevelForFileTrace = Logger::DEBUG;
+    
+    public static function enableAutoPublishingOnUnexpectedShutdown($publishLevel = Logger::ALERT)
+    {
+        self::$autoPublishingOnFatalError = true;
+        if (\class_exists(CommonUtils::class) && !self::$autoPublisherRegistered) {
+            register_shutdown_function(
+                function () use ($publishLevel) {
+                    @CommonUtils::monitorMemoryUsage();
+                    if (self::$autoPublishingOnFatalError) {
+                        /** @var array $error */
+                        $error = error_get_last();
+                        if ($error['type'] == E_ERROR) {
+                            /** @noinspection PhpParamsInspection */
+                            self::log(
+                                $publishLevel,
+                                "Auto publishing because fatal error occured: %s (%s:%d)",
+                                $error['message'],
+                                basename($error['file']),
+                                intval($error['line'])
+                            );
+                        }
+                    }
+                }
+            );
+            self::$autoPublisherRegistered = true;
+        }
+    }
+    
+    public static function disableAutoPublishingOnUnexpectedShutdown()
+    {
+        self::$autoPublishingOnFatalError = false;
+    }
     
     public static function addHandler(HandlerInterface $handler, $name = null)
     {

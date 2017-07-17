@@ -122,6 +122,29 @@ class MLoggingTest extends PHPUnit_Framework_TestCase
         $this->assertStringPatternInFile("/mark.*\\($filename\\:[0-9]+\\).*abc.*xyz.*$/", $this->getLogFile());
     }
     
+    public function testAlertOnFatalError()
+    {
+        $pid = pcntl_fork();
+        if ($pid == 0) {
+            MLogging::enableAutoPublishingOnUnexpectedShutdown();
+            //exit(1);
+            ini_set("display_errors", false);
+            ini_set('error_reporting', ~E_ALL);
+            set_error_handler(null);
+            set_exception_handler(null);
+            $a = [];
+            while (true) {
+                $a[] = $a;
+            }
+            exit(0);
+        }
+        
+        pcntl_waitpid($pid, $status);
+        $exitStatus = pcntl_wexitstatus($status);
+        $this->assertNotEquals(0, $exitStatus);
+        $this->assertStringPatternInFile('/Auto publishing/', $this->getErrorFile());
+    }
+    
     protected function getLogFile()
     {
         $finder = new Symfony\Component\Finder\Finder();

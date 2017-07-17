@@ -15,9 +15,9 @@
         "oasis/utils"                          : "^1.6"
     },
     "require-dev"      : {
-        "phpunit/phpunit"   : "^5.1",
-        "symfony/console"   : "^3.0",
-        "symfony/finder"    : "^3.0"
+        "phpunit/phpunit": "^5.1",
+        "symfony/console": "^3.0",
+        "symfony/finder" : "^3.0"
     },
     "suggest"          : {
         "symfony/console"   : "^3.0",
