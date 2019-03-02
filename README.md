@@ -91,6 +91,34 @@ MLogging::addHandler(new ConsoleHandler());
 
 ```
 
+## Use auto-rotated-timestamp for file handler
+
+The `Oasis\Mlib\Logging\LocalFileHandler` can be easily configured to rotate its filename based on time changes. This is a very useful feature if your script is a longlive script which runs more than just a few seconds. Provided the correct name pattern, the local filename will rotate each time the preset interval has passed. Here is an example:
+
+```php
+<?php
+use Oasis\Mlib\Logging\LocalFileHandler;
+
+$lfh = new LocalFileHandler('/my-log-path', '%date%/%hour%-%minute%-%script%.log');
+
+// This tells the filename to rotate every 30 minutes
+$lfh->setRefreshRate(1800);
+
+```
+
+The supported name patterns are:
+
+|pattern | meaning|
+|:--- |: ---|
+%date% | substituted by date of now, in the format: yyyymmdd
+%hour% | substituted by hour of now, in the format: HH (00-23)
+%minute% | substituted by minute of now, in the format: ii (00-59)
+%second% | substituted by second of now, in the format: ss (00-59)
+%script% | substituted by name of current script, filename only without directory names
+%pid% | substituted by current process ID
+
+
+
 ## Using AWS SNS to auto handle alert
 
 The `Oasis\Mlib\Logging\AwsSnsHandler` provides a handler which is only
