@@ -34,7 +34,7 @@ class MLogging
                     if (self::$autoPublishingOnFatalError) {
                         /** @var array $error */
                         $error = error_get_last();
-                        if ($error['type'] == E_ERROR) {
+                        if ($error && $error['type'] == E_ERROR) {
                             /** @noinspection PhpParamsInspection */
                             self::log(
                                 $publishLevel,
