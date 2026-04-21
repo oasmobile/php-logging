@@ -119,11 +119,11 @@
     - _Requirements: 3.1, 6.3, 9.3, 10.3_
   - [x] 6.2 Checkpoint: 确认手工测试 checklist 已创建，如有问题请向用户确认
 
-- [ ] 7. Code Review
-  - [ ] 7.1 执行 Code Review
+- [x] 7. Code Review
+  - [x] 7.1 执行 Code Review
     - 委托给 code-reviewer agent，基于当前分支的 diff 进行 code review
     - _Requirements: 全部_
-  - [ ] 7.2 Checkpoint: 确认 code review 完成，所有发现的问题已修复，如有问题请向用户确认
+  - [x] 7.2 Checkpoint: 确认 code review 完成，所有发现的问题已修复，如有问题请向用户确认
 
 ## Issues
 
