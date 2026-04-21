@@ -57,7 +57,7 @@
     - _Requirements: 6.4, 9.3, 9.4_
   - [x] 2.7 Checkpoint: 运行 `vendor/bin/phpunit`，确认 lnProcessor 相关测试通过（testLocalFileHandler、testFileTraceSwitch、testContext、testExceptionTracing、testThrowableTracing 以及新增的 Level enum 测试），如有问题请向用户确认
 
-- [-] 3. ConsoleHandler.php — Monolog 3.x + bramus 3.x 兼容
+- [x] 3. ConsoleHandler.php — Monolog 3.x + bramus 3.x 兼容
   - [x] 3.1 Increment alpha tag
     - 查询已有 `v2.0.0-alpha*` tag，取最大序号 +1，打新 tag
   - [x] 3.2 编写 testConsoleHandlerNotHandlingInNonCli 测试用例（RED）
@@ -69,7 +69,7 @@
     - bramus `ColoredLineFormatter` 构造函数：将 `includeStacktraces` 作为第 6 个构造函数参数传入（`true`），移除单独的 `$colored_formatter->includeStacktraces()` 调用
     - 添加 `use Monolog\LogRecord;` 和 `use Monolog\Level;` import，移除 `use Monolog\Logger;`
     - _Requirements: 2.5, 3.1, 3.2, 3.3_
-  - [-] 3.4 Checkpoint: 运行 `vendor/bin/phpunit`，确认所有已通过的测试仍然通过（包括 testConsoleHandlerNotHandlingInNonCli），如有问题请向用户确认
+  - [x] 3.4 Checkpoint: 运行 `vendor/bin/phpunit`，确认所有已通过的测试仍然通过（包括 testConsoleHandlerNotHandlingInNonCli），如有问题请向用户确认
 
 - [ ] 4. LocalFileHandler.php — Monolog 3.x 兼容
   - [ ] 4.1 Increment alpha tag
