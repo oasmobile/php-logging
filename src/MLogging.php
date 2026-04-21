@@ -17,13 +17,13 @@ use Oasis\Mlib\Utils\CommonUtils;
 
 class MLogging
 {
-    protected static $logger                     = null;
-    protected static $autoPublishingOnFatalError = false;
-    protected static $autoPublisherRegistered    = false;
+    private static $logger                     = null;
+    private static $autoPublishingOnFatalError = false;
+    private static $autoPublisherRegistered    = false;
     
     /** @var HandlerInterface[] */
-    protected static $handlers             = [];
-    protected static $minLevelForFileTrace = Level::Debug;
+    private static $handlers             = [];
+    private static $minLevelForFileTrace = Level::Debug;
     
     public static function enableAutoPublishingOnUnexpectedShutdown(Level $publishLevel = Level::Alert)
     {
@@ -38,7 +38,7 @@ class MLogging
                             /** @noinspection PhpParamsInspection */
                             self::log(
                                 $publishLevel,
-                                "Auto publishing because fatal error occured: %s (%s:%d)",
+                                "Auto publishing because fatal error occurred: %s (%s:%d)",
                                 $error['message'],
                                 basename($error['file']),
                                 intval($error['line'])
@@ -51,7 +51,7 @@ class MLogging
         }
     }
     
-    public static function disableAutoPublishingOnUnexpectedShutdown()
+    public static function disableAutoPublishingOnUnexpectedShutdown(): void
     {
         self::$autoPublishingOnFatalError = false;
     }
@@ -111,7 +111,7 @@ class MLogging
         self::getLogger()->log($level, $msg);
     }
     
-    public static function getLogger()
+    public static function getLogger(): Logger
     {
         if (self::$logger instanceof Logger) {
             return self::$logger;

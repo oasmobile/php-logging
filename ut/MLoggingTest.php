@@ -18,7 +18,7 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 class MLoggingTest extends TestCase
 {
-    public $path;
+    protected string $path;
 
     protected function setUp(): void
     {
@@ -192,7 +192,7 @@ class MLoggingTest extends TestCase
         $this->assertStringPatternInFile('/Auto publishing/', $this->getErrorFile());
     }
 
-    protected function getLogFile()
+    protected function getLogFile(): string
     {
         $finder = new Symfony\Component\Finder\Finder();
         $finder->in($this->path);
@@ -204,7 +204,7 @@ class MLoggingTest extends TestCase
         throw new LogicException("Cannot find log file!");
     }
 
-    protected function getErrorFile()
+    protected function getErrorFile(): string
     {
         $finder = new Symfony\Component\Finder\Finder();
         $finder->in($this->path);
@@ -216,7 +216,7 @@ class MLoggingTest extends TestCase
         throw new LogicException("Cannot find error file!");
     }
 
-    protected function assertStringPatternInFile($str, $file)
+    protected function assertStringPatternInFile(string $str, string $file): void
     {
         $fh    = fopen($file, 'r');
         $found = false;
@@ -299,7 +299,7 @@ class MLoggingTest extends TestCase
         $this->assertStringPatternInFile("/INFO.*reinstall-check/", $this->getLogFile());
     }
 
-    protected function assertStringPatternNotInFile($str, $file)
+    protected function assertStringPatternNotInFile(string $str, string $file): void
     {
         $fh    = fopen($file, 'r');
         $found = false;
