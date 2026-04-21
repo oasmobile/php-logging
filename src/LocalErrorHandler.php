@@ -29,7 +29,7 @@ class LocalErrorHandler extends FingersCrossedHandler
             $triggerLevel,
             $bufferLimit, /* buffer size, 0 means no limit */
             true, /* bubbles */
-            false /* stop bufferring on strategy activated */
+            false /* stop buffering on strategy activated */
         );
     }
     
