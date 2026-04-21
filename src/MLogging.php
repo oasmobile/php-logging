@@ -10,6 +10,7 @@ namespace Oasis\Mlib\Logging;
 
 use Monolog\Handler\AbstractHandler;
 use Monolog\Handler\HandlerInterface;
+use Monolog\Handler\ProcessableHandlerInterface;
 use Monolog\Level;
 use Monolog\Logger;
 use Monolog\LogRecord;
@@ -58,7 +59,9 @@ class MLogging
     
     public static function addHandler(HandlerInterface $handler, ?string $name = null): void
     {
-        $handler->pushProcessor([self::class, "lnProcessor"]);
+        if ($handler instanceof ProcessableHandlerInterface) {
+            $handler->pushProcessor([self::class, "lnProcessor"]);
+        }
         
         if ($name) {
             $reinstall_required    = isset(self::$handlers[$name]);
