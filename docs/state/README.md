@@ -39,14 +39,4 @@
 - feature 完成后必须更新
 - 修改 state = 修改系统定义
 
----
 
-## 当前文件索引
-
-| 文件 | 覆盖范围 |
-|------|----------|
-| `data-provider.md` | DataProviderInterface / AbstractDataProvider / ArrayDataProvider |
-| `validators.md` | ValidatorInterface 及所有验证器实现 |
-| `exceptions.md` | 异常继承树与各异常用途 |
-| `crypto.md` | CaesarCipher / Rc4 |
-| `utils.md` | StringUtils / DataPacker / CommonUtils / AnsiColorizer |

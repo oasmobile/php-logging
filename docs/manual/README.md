@@ -40,13 +40,4 @@
 - 不定义系统规则（规则在 state）
 - 可以比 state 更易读，但不能更"权威"
 
----
 
-## 当前文件索引
-
-| 文件 | 覆盖范围 |
-|------|----------|
-| `data-provider.md` | ArrayDataProvider 使用方法、嵌套访问、异常处理 |
-| `validators.md` | 各验证器用法示例、链式组合、strict vs 宽松模式 |
-| `crypto.md` | Rc4 与 CaesarCipher 使用方法、查找表持久化 |
-| `utils.md` | StringUtils / DataPacker / CommonUtils / AnsiColorizer |
