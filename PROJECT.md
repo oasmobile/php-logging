@@ -2,10 +2,10 @@
 
 ## 技术栈
 
-- 语言：PHP
+- 语言：PHP（最低 8.2）
 - 包管理：Composer
-- 日志底层：monolog/monolog ^1.17
-- 测试框架：PHPUnit ^5.1
+- 日志底层：monolog/monolog ^3.0
+- 测试框架：PHPUnit ^11.0
 
 ## 命令
 

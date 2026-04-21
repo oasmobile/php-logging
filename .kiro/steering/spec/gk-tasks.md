@@ -165,7 +165,8 @@ tasks.md 必须包含 `## Execution Notes` section（位于 `## Tasks` 之后）
 
 - [ ] `## Execution Notes` section 存在
 - [ ] 明确提到执行时须遵循 `spec-execution.md`（或等效表述，如"按 spec-execution 规范执行"）
-- [ ] 包含当前 spec 特有的执行要点（如特殊的构建命令、环境前置条件、数据兼容注意事项等）——如果 design 或 requirements 中没有特殊要点，至少保留对 `spec-execution.md` 的引用即可
+- [ ] 明确说明 commit 时机（如"每个 top-level task checkpoint 通过后进行一次 commit"或等效表述）
+- [ ] 包含当前 spec 特有的执行要点（如特殊的构建命令、环境前置条件、数据兼容注意事项等）——如果 design 或 requirements 中没有特殊要点，至少保留对 `spec-execution.md` 的引用和 commit 时机说明即可
 
 > **注意**：如果文档使用了 `## Notes` 等非标准名称但内容等价，gatekeeper 应将其重命名为 `## Execution Notes` 并补充缺失内容，而非另建一个 section。
 

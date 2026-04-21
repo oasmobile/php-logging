@@ -10,22 +10,23 @@ namespace Oasis\Mlib\Logging;
 
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
+use Monolog\Level;
+use Monolog\LogRecord;
 
 class LocalFileHandler extends StreamHandler
 {
     use MLoggingHandlerTrait;
     
-    private $path        = null;
-    private $namePattern = "%date%/%script%.log";
+    private ?string $path        = null;
+    private string $namePattern = "%date%/%script%.log";
     
     /**
      * @var int interval between every filename recheck
      */
-    private $refreshRate               = 0;
-    private $lastFileCreationTimestamp = 0;
+    private int $refreshRate               = 0;
+    private int $lastFileCreationTimestamp = 0;
     
-    public function __construct($path = null, $namePattern = "%date%/%script%.log", $level = Logger::DEBUG)
+    public function __construct(?string $path = null, string $namePattern = "%date%/%script%.log", Level $level = Level::Debug)
     {
         if (!$path) {
             $path = sys_get_temp_dir();
@@ -49,7 +50,7 @@ class LocalFileHandler extends StreamHandler
         $this->setFormatter($line_formatter);
     }
     
-    protected function generateCurrentPath()
+    protected function generateCurrentPath(): string
     {
         $translationTable = [
             "%date%"   => date('Ymd'),
@@ -67,23 +68,17 @@ class LocalFileHandler extends StreamHandler
         return $path;
     }
     
-    /**
-     * @return int
-     */
-    public function getRefreshRate()
+    public function getRefreshRate(): int
     {
         return $this->refreshRate;
     }
     
-    /**
-     * @param int $refreshRate
-     */
-    public function setRefreshRate($refreshRate)
+    public function setRefreshRate(int $refreshRate): void
     {
         $this->refreshRate = $refreshRate;
     }
     
-    protected function write(array $record)
+    protected function write(LogRecord $record): void
     {
         try {
             $this->checkFilenameRefresh();

@@ -62,6 +62,17 @@ tools: ["read", "write", "shell"]
 - 修复后 git commit
 - 修复后重新 review 直到通过
 
+### 非本次 diff 代码中的 Bad Smell
+
+review 过程中如果在 diff 上下文（非本次变更的行）中发现 bad smell：
+
+1. **有注释说明原因** → 放过，不报告
+2. **无注释说明** → 向用户确认是否处理
+   - 用户确认处理 → 直接修复
+   - 用户确认不处理 → 在该处添加注释说明保留原因（如 `// [review-skip] <原因>`），使后续 review 可以放过
+
+不得以"不是本次迭代改的"为由直接跳过无注释的 bad smell。
+
 ## Output Format
 
 Review 完成后，输出以下内容：

@@ -11,14 +11,15 @@ namespace Oasis\Mlib\Logging;
 use Bramus\Monolog\Formatter\ColoredLineFormatter;
 use Bramus\Monolog\Formatter\ColorSchemes\DefaultScheme;
 use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
+use Monolog\Level;
+use Monolog\LogRecord;
 use Oasis\Mlib\Utils\CommonUtils;
 
 class ConsoleHandler extends StreamHandler
 {
     use MLoggingHandlerTrait;
 
-    public function __construct($level = Logger::DEBUG)
+    public function __construct(Level $level = Level::Debug)
     {
         $stream = fopen('php://stderr', 'w');
         parent::__construct($stream, $level);
@@ -30,14 +31,14 @@ class ConsoleHandler extends StreamHandler
             $output_format,
             $datetime_format,
             true,
+            true,
             true
         );
-        $colored_formatter->includeStacktraces();
 
         $this->setFormatter($colored_formatter);
     }
 
-    public function isHandling(array $record)
+    public function isHandling(LogRecord $record): bool
     {
         if (!CommonUtils::isRunningFromCommandLine()) {
             return false;

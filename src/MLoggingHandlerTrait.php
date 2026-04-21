@@ -19,7 +19,7 @@ use Monolog\Handler\HandlerInterface;
  */
 trait MLoggingHandlerTrait
 {
-    public function install()
+    public function install(): static
     {
         if ($this instanceof HandlerInterface) {
             MLogging::addHandler($this, static::class);
