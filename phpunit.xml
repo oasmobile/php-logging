@@ -7,6 +7,7 @@
     <testsuites>
         <testsuite name="all">
             <file>ut/MLoggingTest.php</file>
+            <file>ut/LoggableApplicationTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>

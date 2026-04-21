@@ -32,7 +32,7 @@ class LoggableApplication extends Application
         parent::__construct($name, $version);
     }
 
-    protected function configureIO(InputInterface $input, OutputInterface $output)
+    protected function configureIO(InputInterface $input, OutputInterface $output): void
     {
         parent::configureIO($input, $output);
 
@@ -40,7 +40,6 @@ class LoggableApplication extends Application
         switch ($output->getVerbosity()) {
             case OutputInterface::VERBOSITY_QUIET:
                 return;
-                break;
             case OutputInterface::VERBOSITY_NORMAL:
                 $consoleHandler->setLevel(Level::Warning);
                 break;
@@ -55,11 +54,8 @@ class LoggableApplication extends Application
                 break;
             default:
                 throw new \LogicException("Unknown output verbosity: " . $output->getVerbosity());
-                break;
         }
         $consoleHandler->install();
-
-        return;
     }
 
 }
