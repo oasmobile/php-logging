@@ -8,7 +8,8 @@
 
 namespace Oasis\Mlib\Logging;
 
-use Monolog\Logger;
+use Monolog\Handler\NullHandler;
+use Monolog\Level;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -32,34 +33,24 @@ class LoggableApplication extends Application
         parent::__construct($name, $version);
     }
 
-    protected function configureIO(InputInterface $input, OutputInterface $output)
+    protected function configureIO(InputInterface $input, OutputInterface $output): void
     {
         parent::configureIO($input, $output);
 
-        $consoleHandler = new ConsoleHandler();
-        switch ($output->getVerbosity()) {
-            case OutputInterface::VERBOSITY_QUIET:
-                return;
-                break;
-            case OutputInterface::VERBOSITY_NORMAL:
-                $consoleHandler->setLevel(Logger::WARNING);
-                break;
-            case OutputInterface::VERBOSITY_VERBOSE:
-                $consoleHandler->setLevel(Logger::NOTICE);
-                break;
-            case OutputInterface::VERBOSITY_VERY_VERBOSE:
-                $consoleHandler->setLevel(Logger::INFO);
-                break;
-            case OutputInterface::VERBOSITY_DEBUG:
-                $consoleHandler->setLevel(Logger::DEBUG);
-                break;
-            default:
-                throw new \LogicException("Unknown output verbosity: " . $output->getVerbosity());
-                break;
+        if ($output->getVerbosity() === OutputInterface::VERBOSITY_QUIET) {
+            MLogging::getLogger()->pushHandler(new NullHandler());
         }
-        $consoleHandler->install();
+        else {
+            $level = match ($output->getVerbosity()) {
+                OutputInterface::VERBOSITY_NORMAL       => Level::Warning,
+                OutputInterface::VERBOSITY_VERBOSE      => Level::Notice,
+                OutputInterface::VERBOSITY_VERY_VERBOSE => Level::Info,
+                OutputInterface::VERBOSITY_DEBUG        => Level::Debug,
+                default => throw new \LogicException("Unknown output verbosity: " . $output->getVerbosity()),
+            };
 
-        return;
+            (new ConsoleHandler($level))->install();
+        }
     }
 
 }
