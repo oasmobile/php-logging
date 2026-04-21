@@ -17,6 +17,7 @@ Agent 执行 shell 命令时的安全约束。
 - `git rebase` — 改写历史（严格禁止）
 - `git push --force` — 强制推送（覆盖远程历史）
 - `git reset --hard` — 硬重置（丢弃未提交变更）
+- `git checkout -- <path>` — 撤销工作区修改（不可恢复，必须经用户明确同意）
 - `curl | bash`（及等价的 `wget | sh`）— 远程脚本盲执行
 - `chmod 777` — 开放全部权限
 
