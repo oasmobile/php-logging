@@ -45,7 +45,7 @@ class LoggableApplication extends Application
                 OutputInterface::VERBOSITY_NORMAL       => Level::Warning,
                 OutputInterface::VERBOSITY_VERBOSE      => Level::Notice,
                 OutputInterface::VERBOSITY_VERY_VERBOSE => Level::Info,
-                OutputInterface::VERBOSITY_DEBUG         => Level::Debug,
+                OutputInterface::VERBOSITY_DEBUG        => Level::Debug,
                 default => throw new \LogicException("Unknown output verbosity: " . $output->getVerbosity()),
             };
 
