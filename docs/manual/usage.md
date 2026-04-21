@@ -35,11 +35,13 @@ mdebug("The object %s is being processed", $name);
 ## 异常追踪
 
 ```php
+use Monolog\Level;
+
 try {
     throw new \RuntimeException("something went wrong", 99);
-} catch (\Exception $e) {
+} catch (\Throwable $e) {
     mtrace($e);                          // 默认 INFO 级别
-    mtrace($e, "上下文说明: ", Logger::ERROR); // 自定义级别
+    mtrace($e, "上下文说明: ", Level::Error); // 自定义级别
 }
 ```
 
@@ -112,8 +114,8 @@ $lfh->install();
 (new LocalErrorHandler(
     '/var/log/myapp',
     '%date%/%script%.error',
-    Logger::DEBUG,      // 缓冲的最低级别
-    Logger::CRITICAL,   // 触发级别
+    Level::Debug,       // 缓冲的最低级别
+    Level::Critical,    // 触发级别
     500                 // 缓冲上限
 ))->install();
 ```
@@ -121,15 +123,15 @@ $lfh->install();
 ## 日志级别控制
 
 ```php
-use Monolog\Logger;
+use Monolog\Level;
 use Oasis\Mlib\Logging\MLogging;
 
 // 设置所有 Handler 的最低级别
-MLogging::setMinLogLevel(Logger::WARNING);
+MLogging::setMinLogLevel(Level::Warning);
 
 // 按名称或正则匹配设置特定 Handler
-MLogging::setMinLogLevel(Logger::DEBUG, 'console');
-MLogging::setMinLogLevel(Logger::ERROR, '/file/i');
+MLogging::setMinLogLevel(Level::Debug, 'console');
+MLogging::setMinLogLevel(Level::Error, '/file/i');
 ```
 
 ## 文件追踪（调用位置标注）
@@ -140,7 +142,7 @@ MLogging::setMinLogLevel(Logger::ERROR, '/file/i');
 
 ```php
 // 仅 ERROR 及以上才追加文件位置
-MLogging::setMinLogLevelForFileTrace(Logger::ERROR);
+MLogging::setMinLogLevelForFileTrace(Level::Error);
 ```
 
 `setMinLogLevel()` 在不指定 Handler 名称时会同步设置文件追踪级别。
@@ -151,7 +153,7 @@ MLogging::setMinLogLevelForFileTrace(Logger::ERROR);
 
 ```php
 MLogging::enableAutoPublishingOnUnexpectedShutdown();          // 默认 ALERT 级别
-MLogging::enableAutoPublishingOnUnexpectedShutdown(Logger::EMERGENCY);
+MLogging::enableAutoPublishingOnUnexpectedShutdown(Level::Emergency);
 
 // 关闭
 MLogging::disableAutoPublishingOnUnexpectedShutdown();

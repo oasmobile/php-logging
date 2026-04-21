@@ -86,7 +86,7 @@
     - _Requirements: 3.2_
   - [x] 3.2 Checkpoint: 运行 `vendor/bin/phpunit`，确认所有测试通过（包括 testConsoleHandlerNotHandlingInNonCli）
 
-- [-] 4. 补充测试 + 全量回归验证
+- [x] 4. 补充测试 + 全量回归验证
   - [x] 4.1 Increment alpha tag
     - 查询已有 `v2.0.0-alpha*` tag，取最大序号 +1，打新 tag
   - [x] 4.2 编写 testLocalFileHandlerRefreshRate 测试用例
@@ -101,25 +101,25 @@
     - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7_
   - [x] 4.5 Checkpoint: 确认 `vendor/bin/phpunit` 输出 OK 且零失败零错误，如有问题请向用户确认
 
-- [~] 5. 更新 usage.md 文档
-  - [ ] 5.1 更新 `docs/manual/usage.md` 中的代码示例
+- [x] 5. 更新 usage.md 文档
+  - [x] 5.1 更新 `docs/manual/usage.md` 中的代码示例
     - 将 `Logger::INFO`、`Logger::ERROR`、`Logger::WARNING` 等旧常量替换为 `Level::Info`、`Level::Error`、`Level::Warning` 等
     - 将 `\Exception` 相关示例更新为 `\Throwable`（如适用）
     - 更新 import 示例（`use Monolog\Level;` 替代 `use Monolog\Logger;`）
     - _Requirements: 6.1, 6.2_
-  - [ ] 5.2 Checkpoint: 确认 usage.md 中的代码示例与 2.0.0 API 一致
+  - [x] 5.2 Checkpoint: 确认 usage.md 中的代码示例与 2.0.0 API 一致
 
-- [~] 6. 手工测试
-  - [ ] 6.1 编写手工测试 checklist
+- [x] 6. 手工测试
+  - [x] 6.1 编写手工测试 checklist
     - 在 `docs/manual/` 下创建手工测试文档，覆盖以下场景：
     - 使用 `test.php` 或临时脚本验证 8 个全局日志函数（`mdebug` ~ `memergency`）在 PHP 8.2+ 环境下的控制台彩色输出
     - 验证 `mtrace()` 传入 `\TypeError` 实例时的输出格式
     - 验证 `LoggableApplication` 在不同 verbosity 级别下的日志输出行为
     - 验证 `LocalFileHandler` 文件名模式和 refreshRate 刷新行为
     - _Requirements: 3.1, 6.3, 9.3, 10.3_
-  - [ ] 6.2 Checkpoint: 确认手工测试 checklist 已创建，如有问题请向用户确认
+  - [x] 6.2 Checkpoint: 确认手工测试 checklist 已创建，如有问题请向用户确认
 
-- [~] 7. Code Review
+- [ ] 7. Code Review
   - [ ] 7.1 执行 Code Review
     - 委托给 code-reviewer agent，基于当前分支的 diff 进行 code review
     - _Requirements: 全部_

@@ -40,9 +40,7 @@ class LoggableApplicationTest extends TestCase
         $this->assertSame('UNKNOWN', $app->getVersion());
     }
 
-    /**
-     * @dataProvider verbosityToLevelProvider
-     */
+    #[PHPUnit\Framework\Attributes\DataProvider('verbosityToLevelProvider')]
     public function testConfigureIOSetsConsoleHandlerLevel(int $verbosity, Level $expectedLevel): void
     {
         $app = $this->buildAppWithNoopCommand();
