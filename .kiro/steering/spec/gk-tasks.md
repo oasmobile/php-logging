@@ -21,10 +21,11 @@ description: Spec gatekeeper 校验 tasks 阶段的详细指引。由 spec-gatek
 8. Task 粒度校验
 9. 手工测试 Task 校验
 10. Code Review Task 校验
-11. Socratic Review 校验
-12. 目的性审查
-13. 将修正项写入 Gatekeep Log
-14. Completion：向 main-agent 返回结果
+11. 执行注意事项校验
+12. Socratic Review 校验
+13. 目的性审查
+14. 将修正项写入 Gatekeep Log
+15. Completion：向 main-agent 返回结果
 
 ---
 
@@ -156,7 +157,21 @@ Release spec 的 tasks 结构不同：
 
 ---
 
-## 11. Socratic Review 校验
+## 11. 执行注意事项校验
+
+tasks.md 必须包含 `## Execution Notes` section（位于 `## Tasks` 之后），提醒执行者在执行 task 时应遵循的关键规范。
+
+### 检查项
+
+- [ ] `## Execution Notes` section 存在
+- [ ] 明确提到执行时须遵循 `spec-execution.md`（或等效表述，如"按 spec-execution 规范执行"）
+- [ ] 包含当前 spec 特有的执行要点（如特殊的构建命令、环境前置条件、数据兼容注意事项等）——如果 design 或 requirements 中没有特殊要点，至少保留对 `spec-execution.md` 的引用即可
+
+> **注意**：如果文档使用了 `## Notes` 等非标准名称但内容等价，gatekeeper 应将其重命名为 `## Execution Notes` 并补充缺失内容，而非另建一个 section。
+
+---
+
+## 12. Socratic Review 校验
 
 如果文档缺少 `## Socratic Review` section，gatekeeper 应补充一个轻量版，至少覆盖：
 
@@ -171,7 +186,7 @@ Release spec 的 tasks 结构不同：
 
 ---
 
-## 12. 目的性审查
+## 13. 目的性审查
 
 完成逐项校验后，退后一步，审视文档整体是否达到了 tasks 阶段的目的。
 
@@ -189,13 +204,13 @@ Tasks 的核心目的是：**提供一份可直接执行的实现计划，让执
 
 ---
 
-## 13. Gatekeep Log
+## 14. Gatekeep Log
 
 将校验过程中的修正项写入 tasks.md 末尾的 `## Gatekeep Log` section。
 
 ---
 
-## 14. Completion
+## 15. Completion
 
 Gatekeeper 完成所有校验和修正后，向 main-agent 返回以下内容：
 
