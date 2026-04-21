@@ -49,4 +49,4 @@ description: 当开启一个新的 spec、生成 requirements、生成 design、
 | 最后 | Code Review task |
 
 - **Release top-level task 额外规则**：每个 top-level task 的第一个 sub-task 为 "Increment alpha tag"（查询已有 alpha tag，取最大序号 +1，打新 tag）
-- **Execution Notes section**：`## Tasks` 之后须包含 `## Execution Notes` section，至少明确提到执行时须遵循 `spec-execution.md`；如有当前 spec 特有的执行要点（特殊构建命令、环境前置条件、数据兼容注意事项等），一并列出
+- **Execution Notes section**：`## Tasks` 之后须包含 `## Execution Notes` section，至少明确提到执行时须遵循 `spec-execution.md`，并说明 commit 时机（如 checkpoint 通过后 commit）；如有当前 spec 特有的执行要点（特殊构建命令、环境前置条件、数据兼容注意事项等），一并列出
