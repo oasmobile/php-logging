@@ -6,20 +6,20 @@
 
 ## Tasks
 
-- [ ] 1. composer.json 依赖版本升级 + 依赖解析验证
-  - [ ] 1.1 Increment alpha tag
+- [-] 1. composer.json 依赖版本升级 + 依赖解析验证
+  - [x] 1.1 Increment alpha tag
     - 查询已有 `v2.0.0-alpha*` tag，取最大序号 +1，打新 tag（若无则从 `v2.0.0-alpha.1` 开始）
-  - [ ] 1.2 更新 composer.json 依赖版本约束
+  - [x] 1.2 更新 composer.json 依赖版本约束
     - `require` 中添加 `"php": ">=8.2"`，`monolog/monolog` 改为 `^3.0`，`bramus/monolog-colored-line-formatter` 改为 `^3.0`，`oasis/utils` 改为 `^2.0`
     - `require-dev` 中 `phpunit/phpunit` 改为 `^11.0`，`symfony/console` 改为 `^7.0`，`symfony/finder` 改为 `^7.0`
     - `suggest` 中 `symfony/console` 改为 `^7.0`
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7_
-  - [ ] 1.3 执行 `composer update` 验证依赖解析
+  - [x] 1.3 执行 `composer update` 验证依赖解析
     - 确认所有依赖无冲突地解析完成，`composer.lock` 正常生成
     - _Requirements: 1.8_
-  - [ ] 1.4 Checkpoint: 确认 `composer update` 成功完成，依赖解析无冲突
+  - [-] 1.4 Checkpoint: 确认 `composer update` 成功完成，依赖解析无冲突
 
-- [ ] 2. MLogging.php + MLogging.inc.php — 核心门面适配
+- [~] 2. MLogging.php + MLogging.inc.php — 核心门面适配
   - [ ] 2.1 Increment alpha tag
     - 查询已有 `v2.0.0-alpha*` tag，取最大序号 +1，打新 tag
   - [ ] 2.2 编写 MLoggingTest 新增测试用例（RED）

@@ -10,17 +10,18 @@
         }
     ],
     "require"          : {
-        "monolog/monolog"                      : "^1.17",
-        "bramus/monolog-colored-line-formatter": "^2.0",
-        "oasis/utils"                          : "^1.6"
+        "php"                                  : ">=8.2",
+        "monolog/monolog"                      : "^3.0",
+        "bramus/monolog-colored-line-formatter": "^3.0",
+        "oasis/utils"                          : "^2.0"
     },
     "require-dev"      : {
-        "phpunit/phpunit": "^5.1",
-        "symfony/console": "^3.0",
-        "symfony/finder" : "^3.0"
+        "phpunit/phpunit": "^11.0",
+        "symfony/console": "^7.0",
+        "symfony/finder" : "^7.0"
     },
     "suggest"          : {
-        "symfony/console"   : "^3.0",
+        "symfony/console"   : "^7.0",
         "oasis/aws-wrappers": "^2.7"
     },
     "autoload"         : {
