@@ -19,7 +19,7 @@
     - _Requirements: 1.8_
   - [x] 1.4 Checkpoint: 确认 `composer update` 成功完成，依赖解析无冲突
 
-- [-] 2. MLogging.php + MLogging.inc.php — 核心门面适配
+- [x] 2. MLogging.php + MLogging.inc.php — 核心门面适配
   - [x] 2.1 Increment alpha tag
     - 查询已有 `v2.0.0-alpha*` tag，取最大序号 +1，打新 tag
   - [x] 2.2 编写 MLoggingTest 新增测试用例（RED）
@@ -55,21 +55,21 @@
     - `getExceptionDebugInfo()` 参数类型：`\Exception` → `\Throwable`，添加 `: string` 返回类型
     - 更新 `use` 语句：添加 `use Monolog\Level;`，移除不再需要的 `use Monolog\Logger;`（如果 Logger 不再被引用）
     - _Requirements: 6.4, 9.3, 9.4_
-  - [-] 2.7 Checkpoint: 运行 `vendor/bin/phpunit`，确认 lnProcessor 相关测试通过（testLocalFileHandler、testFileTraceSwitch、testContext、testExceptionTracing、testThrowableTracing 以及新增的 Level enum 测试），如有问题请向用户确认
+  - [x] 2.7 Checkpoint: 运行 `vendor/bin/phpunit`，确认 lnProcessor 相关测试通过（testLocalFileHandler、testFileTraceSwitch、testContext、testExceptionTracing、testThrowableTracing 以及新增的 Level enum 测试），如有问题请向用户确认
 
-- [~] 3. ConsoleHandler.php — Monolog 3.x + bramus 3.x 兼容
-  - [ ] 3.1 Increment alpha tag
+- [-] 3. ConsoleHandler.php — Monolog 3.x + bramus 3.x 兼容
+  - [x] 3.1 Increment alpha tag
     - 查询已有 `v2.0.0-alpha*` tag，取最大序号 +1，打新 tag
-  - [ ] 3.2 编写 testConsoleHandlerNotHandlingInNonCli 测试用例（RED）
+  - [x] 3.2 编写 testConsoleHandlerNotHandlingInNonCli 测试用例（RED）
     - 在 `ut/MLoggingTest.php` 中新增 `testConsoleHandlerNotHandlingInNonCli()`：使用 PHPUnit 内置 mock 模拟 `CommonUtils::isRunningFromCommandLine()` 返回 false，验证 ConsoleHandler 的 `isHandling()` 返回 false
     - _Requirements: 3.2_
-  - [ ] 3.3 适配 ConsoleHandler
+  - [x] 3.3 适配 ConsoleHandler
     - `isHandling()` 方法签名：`array $record` → `LogRecord $record`，添加 `: bool` 返回类型
     - 构造函数 level 参数：`$level = Logger::DEBUG` → `Level $level = Level::Debug`
     - bramus `ColoredLineFormatter` 构造函数：将 `includeStacktraces` 作为第 6 个构造函数参数传入（`true`），移除单独的 `$colored_formatter->includeStacktraces()` 调用
     - 添加 `use Monolog\LogRecord;` 和 `use Monolog\Level;` import，移除 `use Monolog\Logger;`
     - _Requirements: 2.5, 3.1, 3.2, 3.3_
-  - [ ] 3.4 Checkpoint: 运行 `vendor/bin/phpunit`，确认所有已通过的测试仍然通过（包括 testConsoleHandlerNotHandlingInNonCli），如有问题请向用户确认
+  - [-] 3.4 Checkpoint: 运行 `vendor/bin/phpunit`，确认所有已通过的测试仍然通过（包括 testConsoleHandlerNotHandlingInNonCli），如有问题请向用户确认
 
 - [ ] 4. LocalFileHandler.php — Monolog 3.x 兼容
   - [ ] 4.1 Increment alpha tag
