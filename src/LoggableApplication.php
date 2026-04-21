@@ -8,7 +8,7 @@
 
 namespace Oasis\Mlib\Logging;
 
-use Monolog\Logger;
+use Monolog\Level;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -42,16 +42,16 @@ class LoggableApplication extends Application
                 return;
                 break;
             case OutputInterface::VERBOSITY_NORMAL:
-                $consoleHandler->setLevel(Logger::WARNING);
+                $consoleHandler->setLevel(Level::Warning);
                 break;
             case OutputInterface::VERBOSITY_VERBOSE:
-                $consoleHandler->setLevel(Logger::NOTICE);
+                $consoleHandler->setLevel(Level::Notice);
                 break;
             case OutputInterface::VERBOSITY_VERY_VERBOSE:
-                $consoleHandler->setLevel(Logger::INFO);
+                $consoleHandler->setLevel(Level::Info);
                 break;
             case OutputInterface::VERBOSITY_DEBUG:
-                $consoleHandler->setLevel(Logger::DEBUG);
+                $consoleHandler->setLevel(Level::Debug);
                 break;
             default:
                 throw new \LogicException("Unknown output verbosity: " . $output->getVerbosity());

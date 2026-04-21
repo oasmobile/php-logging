@@ -10,9 +10,10 @@ namespace Oasis\Mlib\Logging;
 
 use Monolog\Handler\AbstractHandler;
 use Monolog\Handler\HandlerInterface;
+use Monolog\Level;
 use Monolog\Logger;
+use Monolog\LogRecord;
 use Oasis\Mlib\Utils\CommonUtils;
-use Oasis\Mlib\Utils\StringUtils;
 
 class MLogging
 {
@@ -22,18 +23,17 @@ class MLogging
     
     /** @var HandlerInterface[] */
     protected static $handlers             = [];
-    protected static $minLevelForFileTrace = Logger::DEBUG;
+    protected static $minLevelForFileTrace = Level::Debug;
     
-    public static function enableAutoPublishingOnUnexpectedShutdown($publishLevel = Logger::ALERT)
+    public static function enableAutoPublishingOnUnexpectedShutdown(Level $publishLevel = Level::Alert)
     {
         self::$autoPublishingOnFatalError = true;
         if (\class_exists(CommonUtils::class) && !self::$autoPublisherRegistered) {
             register_shutdown_function(
                 function () use ($publishLevel) {
+                    $error = error_get_last();
                     @CommonUtils::monitorMemoryUsage();
                     if (self::$autoPublishingOnFatalError) {
-                        /** @var array $error */
-                        $error = error_get_last();
                         if ($error && $error['type'] == E_ERROR) {
                             /** @noinspection PhpParamsInspection */
                             self::log(
@@ -56,7 +56,7 @@ class MLogging
         self::$autoPublishingOnFatalError = false;
     }
     
-    public static function addHandler(HandlerInterface $handler, $name = null)
+    public static function addHandler(HandlerInterface $handler, ?string $name = null): void
     {
         $handler->pushProcessor([self::class, "lnProcessor"]);
         
@@ -77,7 +77,7 @@ class MLogging
         }
     }
     
-    public static function setMinLogLevel($level, $namePattern = null)
+    public static function setMinLogLevel(Level $level, ?string $namePattern = null): void
     {
         foreach (self::$handlers as $name => $handler) {
             if ($namePattern == null
@@ -95,7 +95,7 @@ class MLogging
         }
     }
     
-    public static function log($level, $msg, ...$args)
+    public static function log(string|Level $level, string $msg, mixed ...$args): void
     {
         if ($args) {
             $msg = vsprintf($msg, $args);
@@ -122,25 +122,23 @@ class MLogging
         return self::$logger;
     }
     
-    public static function setMinLogLevelForFileTrace($level)
+    public static function setMinLogLevelForFileTrace(Level $level): void
     {
-        self::$minLevelForFileTrace = Logger::toMonologLevel($level);
+        self::$minLevelForFileTrace = $level;
     }
     
-    public static function lnProcessor(array $record)
+    public static function lnProcessor(LogRecord $record): LogRecord
     {
-        $record['channel'] = getmypid();
-        if ($record['level'] >= self::$minLevelForFileTrace) {
+        $channel = (string) getmypid();
+        $message = $record->message;
+
+        if (self::$minLevelForFileTrace->includes($record->level)) {
             $callStack        = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 12);
             $self_encountered = false;
             $last_file        = '';
             $last_line        = 0;
+            $passed_src       = false;
             foreach ($callStack as $trace) {
-                if (isset($trace['file']) && isset($trace['line'])) {
-                    $last_file = $trace['file'];
-                    $last_line = $trace['line'];
-                }
-                
                 if (isset($trace['class'])
                     && isset($trace['function'])
                     && $trace['class'] == Logger::class
@@ -148,6 +146,7 @@ class MLogging
                         $trace['function'],
                         [
                             'log',
+                            'addRecord',
                             'debug',
                             'info',
                             'notice',
@@ -164,29 +163,44 @@ class MLogging
                     )
                 ) {
                     $self_encountered = true;
+                    if (isset($trace['file']) && isset($trace['line'])) {
+                        $last_file = $trace['file'];
+                        $last_line = $trace['line'];
+                    }
                     continue;
                 }
                 elseif (!$self_encountered) {
                     continue;
                 }
                 elseif (isset($trace['file']) && dirname($trace['file']) == __DIR__) {
+                    $passed_src = true;
                     continue;
                 }
                 
-                if (!StringUtils::stringEndsWith($record['message'], "\n")) {
-                    $record['message'] .= " ";
+                // Found external caller frame
+                if ($passed_src && isset($trace['file']) && isset($trace['line'])) {
+                    // If we traversed src/ frames, the external caller's
+                    // file/line is where the outermost src/ function was called from
+                    $last_file = $trace['file'];
+                    $last_line = $trace['line'];
                 }
-                if ($last_file && $last_line) {
-                    $record['message'] .= "(" . basename($last_file) . ":" . $last_line . ")";
-                }
+                // If no src/ frames were traversed, last_file/last_line
+                // from the outermost Logger frame is already correct
                 break;
+            }
+            
+            if ($self_encountered && $last_file && $last_line) {
+                if (!str_ends_with($message, "\n")) {
+                    $message .= " ";
+                }
+                $message .= "(" . basename($last_file) . ":" . $last_line . ")";
             }
         }
         
-        return $record;
+        return $record->with(channel: $channel, message: $message);
     }
     
-    public static function getExceptionDebugInfo(\Exception $exception)
+    public static function getExceptionDebugInfo(\Throwable $exception): string
     {
         return sprintf(
             "Exception (%s) info: %s\n" .

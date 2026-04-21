@@ -10,7 +10,8 @@ namespace Oasis\Mlib\Logging;
 
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
+use Monolog\Level;
+use Monolog\LogRecord;
 
 class LocalFileHandler extends StreamHandler
 {
@@ -25,7 +26,7 @@ class LocalFileHandler extends StreamHandler
     private $refreshRate               = 0;
     private $lastFileCreationTimestamp = 0;
     
-    public function __construct($path = null, $namePattern = "%date%/%script%.log", $level = Logger::DEBUG)
+    public function __construct(?string $path = null, string $namePattern = "%date%/%script%.log", Level $level = Level::Debug)
     {
         if (!$path) {
             $path = sys_get_temp_dir();
@@ -83,7 +84,7 @@ class LocalFileHandler extends StreamHandler
         $this->refreshRate = $refreshRate;
     }
     
-    protected function write(array $record)
+    protected function write(LogRecord $record): void
     {
         try {
             $this->checkFilenameRefresh();

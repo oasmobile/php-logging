@@ -6,7 +6,7 @@
 
 ## Tasks
 
-- [-] 1. composer.json 依赖版本升级 + 依赖解析验证
+- [x] 1. composer.json 依赖版本升级 + 依赖解析验证
   - [x] 1.1 Increment alpha tag
     - 查询已有 `v2.0.0-alpha*` tag，取最大序号 +1，打新 tag（若无则从 `v2.0.0-alpha.1` 开始）
   - [x] 1.2 更新 composer.json 依赖版本约束
@@ -17,12 +17,12 @@
   - [x] 1.3 执行 `composer update` 验证依赖解析
     - 确认所有依赖无冲突地解析完成，`composer.lock` 正常生成
     - _Requirements: 1.8_
-  - [-] 1.4 Checkpoint: 确认 `composer update` 成功完成，依赖解析无冲突
+  - [x] 1.4 Checkpoint: 确认 `composer update` 成功完成，依赖解析无冲突
 
-- [~] 2. MLogging.php + MLogging.inc.php — 核心门面适配
-  - [ ] 2.1 Increment alpha tag
+- [-] 2. MLogging.php + MLogging.inc.php — 核心门面适配
+  - [x] 2.1 Increment alpha tag
     - 查询已有 `v2.0.0-alpha*` tag，取最大序号 +1，打新 tag
-  - [ ] 2.2 编写 MLoggingTest 新增测试用例（RED）
+  - [x] 2.2 编写 MLoggingTest 新增测试用例（RED）
     - 在 `ut/MLoggingTest.php` 中新增以下测试方法（此时测试应编译失败或运行失败，因为实现尚未修改）：
     - `testThrowableTracing()`：使用 `\TypeError` 调用 `mtrace()`，验证输出包含异常类名和消息 — _Requirements: 9.3, 9.4, 10.4_
     - `testLogWithLevelEnum()`：使用 `Level` enum 调用 `MLogging::log()`，验证日志正确输出 — _Requirements: 6.2_
@@ -31,11 +31,11 @@
     - 同时适配测试基类和方法签名为 PHPUnit 11.x（`PHPUnit\Framework\TestCase`、`setUp(): void`、`tearDown(): void`）
     - 将现有测试中的 `Logger::DEBUG`/`Logger::INFO`/`Logger::ERROR` 替换为 `Level::Debug`/`Level::Info`/`Level::Error`
     - _Requirements: 8.1, 8.4_
-  - [ ] 2.3 更新 phpunit.xml schema
+  - [x] 2.3 更新 phpunit.xml schema
     - 将 `xsi:noNamespaceSchemaLocation` 从 PHPUnit 5.1 schema URL 更新为 PHPUnit 11.0 schema URL
     - 保留现有 testsuite 配置不变
     - _Requirements: 8.2, 8.3_
-  - [ ] 2.4 适配 MLogging::lnProcessor — LogRecord 数据结构
+  - [x] 2.4 适配 MLogging::lnProcessor — LogRecord 数据结构
     - 参数类型从 `array $record` 改为 `LogRecord $record`，返回类型改为 `LogRecord`
     - 使用 `$record->level->value` 读取级别进行比较（或 `Level::includes()`）
     - 使用 `$record->with(channel: ..., message: ...)` 创建新实例返回
@@ -43,21 +43,21 @@
     - 添加 `use Monolog\LogRecord;` 和 `use Monolog\Level;` import
     - `$minLevelForFileTrace` 属性类型从 `int`（`Logger::DEBUG`）改为 `Level`（`Level::Debug`）
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.7, 9.1_
-  - [ ] 2.5 适配 MLogging 公共接口 — Level enum
+  - [x] 2.5 适配 MLogging 公共接口 — Level enum
     - `setMinLogLevel($level)` 参数类型改为 `Level $level`
     - `setMinLogLevelForFileTrace($level)` 参数类型改为 `Level $level`，移除 `Logger::toMonologLevel()` 调用，直接赋值
     - `log($level, $msg, ...$args)` 参数类型改为 `string|Level $level`
     - `enableAutoPublishingOnUnexpectedShutdown($publishLevel)` 参数默认值从 `Logger::ALERT` 改为 `Level::Alert`
     - `addHandler()` 添加 `?string` 类型提示和 `: void` 返回类型
     - _Requirements: 6.1, 6.2, 7.1, 7.2, 7.3_
-  - [ ] 2.6 适配 MLogging.inc.php — 全局函数
+  - [x] 2.6 适配 MLogging.inc.php — 全局函数
     - `mtrace()` 参数类型：`\Exception` → `\Throwable`，`$logLevel` 默认值从 `Logger::INFO` 改为 `Level::Info`
     - `getExceptionDebugInfo()` 参数类型：`\Exception` → `\Throwable`，添加 `: string` 返回类型
     - 更新 `use` 语句：添加 `use Monolog\Level;`，移除不再需要的 `use Monolog\Logger;`（如果 Logger 不再被引用）
     - _Requirements: 6.4, 9.3, 9.4_
-  - [ ] 2.7 Checkpoint: 运行 `vendor/bin/phpunit`，确认 lnProcessor 相关测试通过（testLocalFileHandler、testFileTraceSwitch、testContext、testExceptionTracing、testThrowableTracing 以及新增的 Level enum 测试），如有问题请向用户确认
+  - [-] 2.7 Checkpoint: 运行 `vendor/bin/phpunit`，确认 lnProcessor 相关测试通过（testLocalFileHandler、testFileTraceSwitch、testContext、testExceptionTracing、testThrowableTracing 以及新增的 Level enum 测试），如有问题请向用户确认
 
-- [ ] 3. ConsoleHandler.php — Monolog 3.x + bramus 3.x 兼容
+- [~] 3. ConsoleHandler.php — Monolog 3.x + bramus 3.x 兼容
   - [ ] 3.1 Increment alpha tag
     - 查询已有 `v2.0.0-alpha*` tag，取最大序号 +1，打新 tag
   - [ ] 3.2 编写 testConsoleHandlerNotHandlingInNonCli 测试用例（RED）
