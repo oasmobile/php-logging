@@ -55,7 +55,7 @@ Release spec 结构不同，必须包含以下 section：
 | 1 | `# Release <version> Requirements` | 必须 | 一级标题，一句话说明本文件定位 |
 | 2 | `## 发布范围` | 必须 | 表格列出本次 release 包含的 feature（Feature 名称、Spec 路径、Proposal 引用、Proposal Status、Tasks 完成状态） |
 | 3 | `## Feature 概要` | 必须 | 每个 feature 一段话概述核心能力和关键实现 |
-| 4 | `## 已知 Issue 评估` | 必须 | 包含"项目级 Issue"和"D 系列 Issue"两个子 section |
+| 4 | `## 已知 Issue 评估` | 必须 | 评估项目级 Issue 对本次发布的影响 |
 | 5 | `## 发布判定` | 必须 | 检查项表格 + 结论 |
 
 ### 检查项
