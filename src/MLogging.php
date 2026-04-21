@@ -31,9 +31,9 @@ class MLogging
         if (\class_exists(CommonUtils::class) && !self::$autoPublisherRegistered) {
             register_shutdown_function(
                 function () use ($publishLevel) {
-                    $error = error_get_last();
-                    @CommonUtils::monitorMemoryUsage();
+                    CommonUtils::monitorMemoryUsage();
                     if (self::$autoPublishingOnFatalError) {
+                        $error = error_get_last();
                         if ($error && $error['type'] == E_ERROR) {
                             /** @noinspection PhpParamsInspection */
                             self::log(
