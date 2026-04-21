@@ -172,6 +172,7 @@ class MLoggingTest extends TestCase
     {
         $pid = pcntl_fork();
         if ($pid == 0) {
+            CommonUtils::disableMemoryMonitor();
             MLogging::enableAutoPublishingOnUnexpectedShutdown();
             //exit(1);
             ini_set("display_errors", false);
@@ -257,6 +258,45 @@ class MLoggingTest extends TestCase
             }
         };
         $this->assertFalse($nonCliHandler->isHandling($record));
+    }
+
+    public function testLocalFileHandlerRefreshRate()
+    {
+        // Create a dedicated handler with %second% in the name pattern so filenames differ across seconds
+        $handler = new LocalFileHandler($this->path, "%date%/%script%-%second%.log");
+        $handler->setRefreshRate(1);
+        $handler->install();
+
+        // Write first log entry
+        minfo("refresh-first");
+
+        // Sleep to cross the refresh boundary
+        sleep(2);
+
+        // Write second log entry — checkFilenameRefresh should regenerate the path
+        minfo("refresh-second");
+
+        // Collect all .log files
+        $finder = new \Symfony\Component\Finder\Finder();
+        $finder->in($this->path)->name('*.log');
+        $logFiles = iterator_to_array($finder, false);
+
+        // With refreshRate=1 and a 2-second sleep, the handler should have created a second file
+        $this->assertGreaterThanOrEqual(2, count($logFiles), "Expected at least 2 log files after refresh rate triggered");
+    }
+
+    public function testHandlerReinstallation()
+    {
+        // setUp() already installed a LocalFileHandler at $this->path.
+        // Install another LocalFileHandler with the same path — this triggers the
+        // reinstallation path (setHandlers) because the handler name (class name) is identical.
+        (new LocalFileHandler($this->path))->install();
+
+        // Write a log message after reinstallation
+        minfo("reinstall-check");
+
+        // Verify the message appears in the log file
+        $this->assertStringPatternInFile("/INFO.*reinstall-check/", $this->getLogFile());
     }
 
     protected function assertStringPatternNotInFile($str, $file)
