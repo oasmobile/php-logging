@@ -61,4 +61,4 @@ Major version bump（1.x → 2.0.0），将项目从 PHP 5.x/7.x 生态升级到
 ## 文档
 
 - 更新 `docs/manual/usage.md`：代码示例中的 `Logger::INFO` 等旧常量替换为 `Level::Info` 等
-- 创建手工测试 checklist：`docs/manual/manual-testing-2.0.0.md`
+- 创建手工测试 checklist：`docs/changes/2.0.0/specs/release-2.0.0/tests/manual-testing-2.0.0.md`
