@@ -22,7 +22,7 @@ class MLogging
     private static bool $autoPublishingOnFatalError = false;
     private static bool $autoPublisherRegistered    = false;
     private static array $handlers                     = [];
-    private static $minLevelForFileTrace = Level::Debug;
+    private static Level $minLevelForFileTrace = Level::Debug;
     
     public static function enableAutoPublishingOnUnexpectedShutdown(Level $publishLevel = Level::Alert)
     {
