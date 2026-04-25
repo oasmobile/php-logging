@@ -47,6 +47,7 @@ MLogging（静态门面）
 - 支持 refreshRate 定时轮转文件名
 - 默认路径：`sys_get_temp_dir()`
 - 默认模式：`%date%/%script%.log`
+- 属性声明：`$path` 为手动声明的 `readonly string`（非 nullable，构造函数内条件赋值）；`$namePattern` 通过 constructor promotion 声明为 `readonly string`；`$refreshRate` 和 `$lastFileCreationTimestamp` 保持可变
 
 ### LocalErrorHandler
 
