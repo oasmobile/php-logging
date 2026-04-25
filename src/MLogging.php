@@ -24,7 +24,7 @@ class MLogging
     private static array $handlers                     = [];
     private static Level $minLevelForFileTrace = Level::Debug;
     
-    public static function enableAutoPublishingOnUnexpectedShutdown(Level $publishLevel = Level::Alert)
+    public static function enableAutoPublishingOnUnexpectedShutdown(Level $publishLevel = Level::Alert): void
     {
         self::$autoPublishingOnFatalError = true;
         if (\class_exists(CommonUtils::class) && !self::$autoPublisherRegistered) {
@@ -34,7 +34,6 @@ class MLogging
                     if (self::$autoPublishingOnFatalError) {
                         $error = error_get_last();
                         if ($error && $error['type'] == E_ERROR) {
-                            /** @noinspection PhpParamsInspection */
                             self::log(
                                 $publishLevel,
                                 "Auto publishing because fatal error occurred: %s (%s:%d)",

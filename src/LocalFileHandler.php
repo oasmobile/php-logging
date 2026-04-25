@@ -88,7 +88,7 @@ class LocalFileHandler extends StreamHandler
         }
     }
     
-    protected function checkFilenameRefresh()
+    protected function checkFilenameRefresh(): void
     {
         if ($this->refreshRate > 0) {
             $now = \time();
