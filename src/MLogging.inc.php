@@ -57,7 +57,7 @@ function mtrace(\Throwable $e, string $prompt_string = "", string|Level $logLeve
     );
 }
 
-function mdump($obj)
+function mdump(mixed $obj): string
 {
     return print_r($obj, true);
 }
