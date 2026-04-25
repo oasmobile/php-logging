@@ -18,12 +18,10 @@ use Oasis\Mlib\Utils\CommonUtils;
 
 class MLogging
 {
-    private static $logger                     = null;
-    private static $autoPublishingOnFatalError = false;
-    private static $autoPublisherRegistered    = false;
-    
-    /** @var HandlerInterface[] */
-    private static $handlers             = [];
+    private static ?Logger $logger                     = null;
+    private static bool $autoPublishingOnFatalError = false;
+    private static bool $autoPublisherRegistered    = false;
+    private static array $handlers                     = [];
     private static $minLevelForFileTrace = Level::Debug;
     
     public static function enableAutoPublishingOnUnexpectedShutdown(Level $publishLevel = Level::Alert)
