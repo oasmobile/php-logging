@@ -25,10 +25,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class LoggableApplication extends Application
 {
-    /**
-     * @inheritdoc
-     */
-    public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN')
+    public function __construct(string $name = 'UNKNOWN', string $version = 'UNKNOWN')
     {
         parent::__construct($name, $version);
     }
