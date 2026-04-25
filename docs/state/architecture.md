@@ -11,7 +11,7 @@ oasis/logging（MLogging）是基于 monolog/monolog 的日志封装库，提供
 | 语言 | PHP（最低 8.2，目标运行环境 8.5） |
 | 底层日志库 | monolog/monolog ^3.0 |
 | 彩色输出 | bramus/monolog-colored-line-formatter ^3.0 |
-| 工具依赖 | oasis/utils ^2.0 |
+| 工具依赖 | oasis/utils ^3.0 |
 | 测试框架 | phpunit/phpunit ^11.0 |
 | 包管理 | Composer |
 | 命名空间 | `Oasis\Mlib\Logging` |
