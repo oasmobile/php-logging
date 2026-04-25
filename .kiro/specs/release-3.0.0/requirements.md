@@ -11,7 +11,6 @@
 **不涉及的内容（Non-scope）**：
 - 不修改任何功能逻辑或运行时行为
 - 不调整 Handler 体系结构
-- 不升级依赖版本
 - 不引入 PHP 8.2 以上的新特性（如 DNF types、`#[\Override]` 等），仅清理已有代码的类型声明和属性声明
 
 ---
@@ -80,6 +79,18 @@
 
 ---
 
+### Requirement 5: oasis/utils 依赖升级
+
+**User Story:** 作为开发者，我希望 oasis/logging 3.0.0 依赖 oasis/utils 3.x，以便依赖版本与本项目 major 版本对齐，并获得 oasis/utils 3.0 的语法现代化改进。
+
+#### Acceptance Criteria
+
+1. THE composer.json SHALL 将 `oasis/utils` 的版本约束从 `^2.0` 更新为 `^3.0`
+2. WHEN 执行 `composer update oasis/utils` 后，THE composer.lock SHALL 反映 oasis/utils 3.x 版本
+3. WHEN 修改完成后执行测试套件时，THE Test_Suite SHALL 报告零失败和零错误
+
+---
+
 ## Socratic Review
 
 ### SR-1: readonly + constructor promotion 对路径属性的可行性
@@ -102,15 +113,15 @@
 
 ### SR-4: 各 requirement 之间是否存在矛盾或重叠
 
-**问题**：四条 requirement 分别针对不同的源文件和改动类型，是否存在交叉？
+**问题**：五条 requirement 分别针对不同的源文件和改动类型，是否存在交叉？
 
-**回答**：不存在。REQ-1 针对 MLogging 静态属性，REQ-2 针对全局函数，REQ-3 针对 LoggableApplication 构造函数，REQ-4 针对 LocalFileHandler 属性。各自独立，无重叠。
+**回答**：不存在。REQ-1 针对 MLogging 静态属性，REQ-2 针对全局函数，REQ-3 针对 LoggableApplication 构造函数，REQ-4 针对 LocalFileHandler 属性，REQ-5 针对 oasis/utils 依赖版本。各自独立，无重叠。
 
 ### SR-5: 是否有遗漏的改进项
 
 **问题**：除了 goal.md 列出的 5 项改进，源代码中是否还有其他不符合 PHP 8.2 规范的旧写法？
 
-**回答**：经检查，`ConsoleHandler`、`LocalErrorHandler`、`MLoggingHandlerTrait` 的属性和方法签名已符合 PHP 8.2 规范（使用了 Level enum、LogRecord 类型等）。goal.md 列出的 5 项（合并后为 4 条 requirement）已覆盖所有需要清理的旧写法。
+**回答**：经检查，`ConsoleHandler`、`LocalErrorHandler`、`MLoggingHandlerTrait` 的属性和方法签名已符合 PHP 8.2 规范（使用了 Level enum、LogRecord 类型等）。goal.md 列出的 5 项（合并后为 4 条 requirement）加上 oasis/utils 依赖升级（REQ-5）已覆盖所有需要清理的旧写法和版本对齐。
 
 
 ---
@@ -145,7 +156,7 @@
 - [x] Introduction 存在，描述了 feature 范围
 - [x] Introduction 明确了不涉及的内容（Non-scope）
 - [x] Glossary 存在且非空
-- [x] Requirements section 存在且包含 4 条 requirement
+- [x] Requirements section 存在且包含 5 条 requirement
 - [x] 各 section 之间使用 `---` 分隔
 - [x] Socratic Review 存在且覆盖充分
 

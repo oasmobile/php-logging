@@ -4,7 +4,7 @@
 
 ## Overview
 
-本次变更涉及 4 个源文件的语法现代化，均为声明层面的修改，不改变运行时行为。每个文件的改动相互独立，无跨文件依赖。
+本次变更涉及 4 个源文件的语法现代化和 1 个依赖版本升级，均为声明层面的修改，不改变运行时行为。每个文件的改动相互独立，无跨文件依赖。
 
 ---
 
@@ -18,6 +18,7 @@
 | `src/MLogging.inc.php` | 函数签名加参数类型和返回类型 | 中——`string\|Stringable` 参数类型比原无类型更严格，可能拒绝 `int` 等非字符串参数 |
 | `src/LoggableApplication.php` | 构造函数参数加类型声明 | 低——与父类签名一致 |
 | `src/LocalFileHandler.php` | constructor promotion、readonly、属性类型收窄 | 中——readonly 阻止子类覆写属性；`$path` 类型从 `?string` 收窄为 `string` |
+| `composer.json` | `oasis/utils` 版本约束从 `^2.0` 改为 `^3.0` | 低——oasis/utils 3.0 为同类语法现代化升级，公共 API 不变 |
 
 ### 不受影响的文件
 
@@ -32,6 +33,7 @@
 1. **`readonly` 属性阻止子类覆写**：`LocalFileHandler::$path` 和 `$namePattern` 标记 readonly 后，任何继承 `LocalFileHandler` 并覆写这些属性的子类将产生 fatal error
 2. **全局函数参数类型收紧**：原无类型参数现在要求 `string|Stringable`，传入 `int`、`float` 等类型将触发 TypeError
 3. **属性类型收窄**：`LocalFileHandler::$path` 从 `?string` 收窄为 `string`，子类如果依赖 nullable 语义将不兼容
+4. **依赖 major 版本升级**：`oasis/utils` 从 `^2.0` 升级到 `^3.0`，与本项目同步 major bump；下游项目如果同时依赖 `oasis/utils ^2.0` 将产生版本冲突
 
 ### State 文档影响
 
@@ -60,18 +62,21 @@ private static $autoPublisherRegistered    = false;
 /** @var HandlerInterface[] */
 private static $handlers             = [];
 
+private static $minLevelForFileTrace = Level::Debug;
+
 // After
 private static ?Logger $logger                     = null;
 private static bool $autoPublishingOnFatalError = false;
 private static bool $autoPublisherRegistered    = false;
 private static array $handlers                     = [];
+private static Level $minLevelForFileTrace = Level::Debug;
 ```
 
 要点：
 - `$logger` 使用 `?Logger` 因为默认值为 `null`，运行时通过 `getLogger()` 惰性初始化
 - `$handlers` 移除 `/** @var HandlerInterface[] */` PHPDoc 注解（CR Q1 决策）
 - 默认值保持不变
-- `$minLevelForFileTrace` 已有类型声明（`Level`），不需修改
+- `$minLevelForFileTrace` 原无类型声明，需补充 `Level` 类型
 
 ---
 
@@ -211,11 +216,32 @@ class LocalFileHandler extends StreamHandler
 
 ---
 
+### D5: oasis/utils 依赖升级（→ REQ-5）
+
+**文件**: `composer.json`
+
+**变更**:
+
+```json
+// Before
+"oasis/utils": "^2.0"
+
+// After
+"oasis/utils": "^3.0"
+```
+
+要点：
+- oasis/utils 3.0 同样是 PHP 8.2 语法现代化升级，公共 API（`CommonUtils::isRunningFromCommandLine()`、`CommonUtils::monitorMemoryUsage()` 等）保持不变
+- 本项目使用的 `CommonUtils` 方法签名在 3.0 中无 breaking change，升级后无需修改调用代码
+- 变更后需执行 `composer update oasis/utils` 更新 lock 文件
+
+---
+
 ## 测试策略
 
 本次变更为纯语法现代化，不改变运行时行为。测试策略如下：
 
-- **自动化测试**：每个 Design section（D1–D4）的改动完成后，运行 `vendor/bin/phpunit` 全量测试套件，确认零失败零错误。这是各 requirement AC 中明确要求的验收条件。
+- **自动化测试**：每个 Design section（D1–D5）的改动完成后，运行 `vendor/bin/phpunit` 全量测试套件，确认零失败零错误。这是各 requirement AC 中明确要求的验收条件。
 - **手工测试**：不需要。所有变更均为声明层面的修改，现有自动化测试已覆盖相关代码路径（`ut/MLoggingTest.php` 覆盖日志写入和 handler 注册，`ut/LoggableApplicationTest.php` 覆盖 Symfony Console 集成）。
 
 ---
@@ -272,7 +298,7 @@ class LocalFileHandler extends StreamHandler
 **机械扫描**
 - [x] 无 TBD / TODO / 待定 / 占位符
 - [x] 无空 section 或不完整的列表
-- [x] 内部引用一致（D1→REQ-1, D2→REQ-2, D3→REQ-3, D4→REQ-4；CR 决策引用正确）
+- [x] 内部引用一致（D1→REQ-1, D2→REQ-2, D3→REQ-3, D4→REQ-4, D5→REQ-5；CR 决策引用正确）
 - [x] 代码块语法正确（语言标注 php、闭合完整）
 - [x] 无 markdown 格式错误
 
@@ -280,7 +306,7 @@ class LocalFileHandler extends StreamHandler
 - [x] 一级标题存在且含定位说明
 - [x] Overview section 存在
 - [x] Impact Analysis 存在，含受影响文件、不受影响文件、Breaking Change 分析、State 文档影响、配置项变更
-- [x] Design Details 存在，D1–D4 承接 REQ-1–REQ-4
+- [x] Design Details 存在，D1–D5 承接 REQ-1–REQ-5
 - [x] 测试策略 section 存在
 - [x] Socratic Review 存在（5 条）
 - [x] 各 section 之间使用 `---` 分隔
@@ -290,13 +316,14 @@ class LocalFileHandler extends StreamHandler
 - [x] REQ-2（全局函数类型声明）→ D2
 - [x] REQ-3（LoggableApplication 构造函数参数类型声明）→ D3
 - [x] REQ-4（LocalFileHandler 属性现代化）→ D4
+- [x] REQ-5（oasis/utils 依赖升级）→ D5
 - [x] 无遗漏的 requirement
 - [x] Design 不超出 requirements 范围
 
 **Impact Analysis 校验**
-- [x] 受影响文件列表完整（4 个源文件）
+- [x] 受影响文件列表完整（4 个源文件 + composer.json）
 - [x] 不受影响文件显式列出并说明原因
-- [x] Breaking Change 分析充分（3 项 breaking change 对应 major bump）
+- [x] Breaking Change 分析充分（4 项 breaking change 对应 major bump）
 - [x] State 文档影响已标注
 - [x] 配置项变更已标注（不涉及）
 - [○] 外部系统交互变化——不涉及，本次为纯内部语法变更
@@ -312,9 +339,9 @@ class LocalFileHandler extends StreamHandler
 - [x] Requirements CR 回应：Q1（移除 PHPDoc）→ D1 体现；Q2（$path 非 nullable）→ D4 体现；Q3（string|Stringable）→ D2 体现
 - [x] 技术选型明确：所有关键决策（promotion vs 手动声明、类型转换、PHPDoc 移除）均有结论和理由
 - [x] 接口定义可执行：Before/After 代码片段足够具体，task 执行者可直接编码
-- [x] Requirements 全覆盖：4 条 requirement 均有对应 Design section
+- [x] Requirements 全覆盖：5 条 requirement 均有对应 Design section
 - [x] Impact 充分评估：覆盖源文件、state 文档、breaking change、配置项
-- [x] 可 task 化：D1–D4 相互独立，可拆为独立 task
+- [x] 可 task 化：D1–D5 相互独立，可拆为独立 task
 
 ### Clarification Round
 

@@ -18,12 +18,12 @@ oasis/logging 项目的 `composer.json` 已声明 `php >= 8.2`，核心逻辑（
 - 为 `LoggableApplication::__construct()` 的参数添加 `string` 类型声明
 - 将 `LocalFileHandler` 改用 constructor promotion 简化属性初始化
 - 将 `LocalFileHandler` 构造后不再变更的属性（`$path`、`$namePattern`）标记为 `readonly`
+- 将 `oasis/utils` 依赖从 `^2.0` 升级到 `^3.0`，与本项目 major 版本对齐
 
 ## 不做的事情（Non-Goals）
 
 - 不修改任何功能逻辑或行为
 - 不调整 Handler 体系结构
-- 不升级依赖版本
 - 不引入新的 PHP 8.2+ 特性（如 DNF types、`#[\Override]` 等），仅清理已有代码的类型声明和属性声明
 
 ## Clarification 记录
