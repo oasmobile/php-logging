@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "42ea2e0858801920ce11b211181bbc8e",
+    "content-hash": "25a3a8d10a4c5c1be586f8019633a0e9",
     "packages": [
         {
             "name": "bramus/ansi-php",
@@ -207,16 +207,16 @@
         },
         {
             "name": "oasis/utils",
-            "version": "v2.0.1",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oasmobile/php-utils.git",
-                "reference": "b8854c00e5169e20a746d07f2574d9aefa502b27"
+                "reference": "5dcc501650eaf01d4b66a45c50161b1b2a9630f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oasmobile/php-utils/zipball/b8854c00e5169e20a746d07f2574d9aefa502b27",
-                "reference": "b8854c00e5169e20a746d07f2574d9aefa502b27",
+                "url": "https://api.github.com/repos/oasmobile/php-utils/zipball/5dcc501650eaf01d4b66a45c50161b1b2a9630f7",
+                "reference": "5dcc501650eaf01d4b66a45c50161b1b2a9630f7",
                 "shasum": ""
             },
             "require": {
@@ -245,9 +245,9 @@
             "description": "Various utility classes & functions",
             "support": {
                 "issues": "https://github.com/oasmobile/php-utils/issues",
-                "source": "https://github.com/oasmobile/php-utils/tree/v2.0.1"
+                "source": "https://github.com/oasmobile/php-utils/tree/v3.0.0"
             },
-            "time": "2026-04-21T08:46:29+00:00"
+            "time": "2026-04-25T13:02:07+00:00"
         },
         {
             "name": "psr/log",

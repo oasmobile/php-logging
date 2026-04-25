@@ -31,6 +31,7 @@ class MLoggingTest extends TestCase
 
     protected function tearDown(): void
     {
+        MLogging::reset();
     }
 
     public function testLocalFileHandler()
@@ -172,7 +173,6 @@ class MLoggingTest extends TestCase
     {
         $pid = pcntl_fork();
         if ($pid == 0) {
-            CommonUtils::disableMemoryMonitor();
             MLogging::enableAutoPublishingOnUnexpectedShutdown();
             //exit(1);
             ini_set("display_errors", false);

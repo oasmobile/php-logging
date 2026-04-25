@@ -17,8 +17,7 @@ class LocalFileHandler extends StreamHandler
 {
     use MLoggingHandlerTrait;
     
-    private ?string $path        = null;
-    private string $namePattern = "%date%/%script%.log";
+    private readonly string $path;
     
     /**
      * @var int interval between every filename recheck
@@ -26,14 +25,13 @@ class LocalFileHandler extends StreamHandler
     private int $refreshRate               = 0;
     private int $lastFileCreationTimestamp = 0;
     
-    public function __construct(?string $path = null, string $namePattern = "%date%/%script%.log", Level $level = Level::Debug)
+    public function __construct(
+        ?string $path = null,
+        private readonly string $namePattern = "%date%/%script%.log",
+        Level $level = Level::Debug,
+    )
     {
-        if (!$path) {
-            $path = sys_get_temp_dir();
-        }
-        
-        $this->path        = $path;
-        $this->namePattern = $namePattern;
+        $this->path = $path ?: sys_get_temp_dir();
         
         parent::__construct($this->generateCurrentPath(), $level);
         
@@ -90,7 +88,7 @@ class LocalFileHandler extends StreamHandler
         }
     }
     
-    protected function checkFilenameRefresh()
+    protected function checkFilenameRefresh(): void
     {
         if ($this->refreshRate > 0) {
             $now = \time();

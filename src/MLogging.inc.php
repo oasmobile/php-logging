@@ -9,44 +9,44 @@
 use Monolog\Level;
 use Oasis\Mlib\Logging\MLogging;
 
-function mdebug($msg, ...$args)
+function mdebug(string|\Stringable $msg, mixed ...$args): void
 {
-    MLogging::log(substr(__FUNCTION__, 1), $msg, ...$args);
+    MLogging::log(substr(__FUNCTION__, 1), (string) $msg, ...$args);
 }
 
-function minfo($msg, ...$args)
+function minfo(string|\Stringable $msg, mixed ...$args): void
 {
-    MLogging::log(substr(__FUNCTION__, 1), $msg, ...$args);
+    MLogging::log(substr(__FUNCTION__, 1), (string) $msg, ...$args);
 }
 
-function mnotice($msg, ...$args)
+function mnotice(string|\Stringable $msg, mixed ...$args): void
 {
-    MLogging::log(substr(__FUNCTION__, 1), $msg, ...$args);
+    MLogging::log(substr(__FUNCTION__, 1), (string) $msg, ...$args);
 }
 
-function mwarning($msg, ...$args)
+function mwarning(string|\Stringable $msg, mixed ...$args): void
 {
-    MLogging::log(substr(__FUNCTION__, 1), $msg, ...$args);
+    MLogging::log(substr(__FUNCTION__, 1), (string) $msg, ...$args);
 }
 
-function merror($msg, ...$args)
+function merror(string|\Stringable $msg, mixed ...$args): void
 {
-    MLogging::log(substr(__FUNCTION__, 1), $msg, ...$args);
+    MLogging::log(substr(__FUNCTION__, 1), (string) $msg, ...$args);
 }
 
-function mcritical($msg, ...$args)
+function mcritical(string|\Stringable $msg, mixed ...$args): void
 {
-    MLogging::log(substr(__FUNCTION__, 1), $msg, ...$args);
+    MLogging::log(substr(__FUNCTION__, 1), (string) $msg, ...$args);
 }
 
-function malert($msg, ...$args)
+function malert(string|\Stringable $msg, mixed ...$args): void
 {
-    MLogging::log(substr(__FUNCTION__, 1), $msg, ...$args);
+    MLogging::log(substr(__FUNCTION__, 1), (string) $msg, ...$args);
 }
 
-function memergency($msg, ...$args)
+function memergency(string|\Stringable $msg, mixed ...$args): void
 {
-    MLogging::log(substr(__FUNCTION__, 1), $msg, ...$args);
+    MLogging::log(substr(__FUNCTION__, 1), (string) $msg, ...$args);
 }
 
 function mtrace(\Throwable $e, string $prompt_string = "", string|Level $logLevel = Level::Info): void
@@ -57,7 +57,7 @@ function mtrace(\Throwable $e, string $prompt_string = "", string|Level $logLeve
     );
 }
 
-function mdump($obj)
+function mdump(mixed $obj): string
 {
     return print_r($obj, true);
 }

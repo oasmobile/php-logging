@@ -18,25 +18,25 @@ use Oasis\Mlib\Utils\CommonUtils;
 
 class MLogging
 {
-    private static $logger                     = null;
-    private static $autoPublishingOnFatalError = false;
-    private static $autoPublisherRegistered    = false;
+    private static ?Logger $logger                     = null;
+    private static bool $autoPublishingOnFatalError = false;
+    private static bool $autoPublisherRegistered    = false;
+    private static array $handlers                     = [];
+    private static Level $minLevelForFileTrace = Level::Debug;
     
-    /** @var HandlerInterface[] */
-    private static $handlers             = [];
-    private static $minLevelForFileTrace = Level::Debug;
-    
-    public static function enableAutoPublishingOnUnexpectedShutdown(Level $publishLevel = Level::Alert)
+    public static function enableAutoPublishingOnUnexpectedShutdown(Level $publishLevel = Level::Alert): void
     {
         self::$autoPublishingOnFatalError = true;
         if (\class_exists(CommonUtils::class) && !self::$autoPublisherRegistered) {
             register_shutdown_function(
                 function () use ($publishLevel) {
-                    CommonUtils::monitorMemoryUsage();
+                    // After an OOM fatal error the process has almost no
+                    // headroom left.  Remove the limit so the log call below
+                    // can allocate the memory it needs.
+                    \ini_set('memory_limit', '-1');
                     if (self::$autoPublishingOnFatalError) {
                         $error = error_get_last();
                         if ($error && $error['type'] == E_ERROR) {
-                            /** @noinspection PhpParamsInspection */
                             self::log(
                                 $publishLevel,
                                 "Auto publishing because fatal error occurred: %s (%s:%d)",
@@ -55,6 +55,18 @@ class MLogging
     public static function disableAutoPublishingOnUnexpectedShutdown(): void
     {
         self::$autoPublishingOnFatalError = false;
+    }
+    
+    /**
+     * Reset all static state (logger, handlers, file-trace level).
+     * Intended for test isolation — call in tearDown() to prevent
+     * handler leakage across test cases.
+     */
+    public static function reset(): void
+    {
+        self::$logger            = null;
+        self::$handlers          = [];
+        self::$minLevelForFileTrace = Level::Debug;
     }
     
     public static function addHandler(HandlerInterface $handler, ?string $name = null): void
