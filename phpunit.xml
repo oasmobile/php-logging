@@ -8,6 +8,7 @@
         <testsuite name="all">
             <file>ut/MLoggingTest.php</file>
             <file>ut/LoggableApplicationTest.php</file>
+            <file>ut/CoverageBoostTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>
