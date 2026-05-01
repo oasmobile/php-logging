@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Created by PhpStorm.
  * User: minhao
@@ -30,25 +33,46 @@ class MLogging
         if (\class_exists(CommonUtils::class) && !self::$autoPublisherRegistered) {
             register_shutdown_function(
                 function () use ($publishLevel) {
-                    // After an OOM fatal error the process has almost no
-                    // headroom left.  Remove the limit so the log call below
-                    // can allocate the memory it needs.
-                    \ini_set('memory_limit', '-1');
-                    if (self::$autoPublishingOnFatalError) {
-                        $error = error_get_last();
-                        if ($error && $error['type'] == E_ERROR) {
-                            self::log(
-                                $publishLevel,
-                                "Auto publishing because fatal error occurred: %s (%s:%d)",
-                                $error['message'],
-                                basename($error['file']),
-                                intval($error['line'])
-                            );
-                        }
-                    }
+                    self::handleUnexpectedShutdown($publishLevel);
                 }
             );
             self::$autoPublisherRegistered = true;
+        }
+    }
+    
+    /**
+     * Handle unexpected shutdown (fatal error).
+     * Extracted for testability — called by the registered shutdown function.
+     *
+     * @internal
+     */
+    public static function handleUnexpectedShutdown(Level $publishLevel = Level::Alert): void
+    {
+        // After an OOM fatal error the process has almost no
+        // headroom left.  Remove the limit so the log call below
+        // can allocate the memory it needs.
+        \ini_set('memory_limit', '-1');
+        if (self::$autoPublishingOnFatalError) {
+            $error = error_get_last();
+            self::publishFatalIfNeeded($error, $publishLevel);
+        }
+    }
+    
+    /**
+     * Publish a log message if the given error is a fatal error (E_ERROR).
+     *
+     * @internal
+     */
+    public static function publishFatalIfNeeded(?array $error, Level $publishLevel): void
+    {
+        if ($error && $error['type'] == E_ERROR) {
+            self::log(
+                $publishLevel,
+                "Auto publishing because fatal error occurred: %s (%s:%d)",
+                $error['message'],
+                basename($error['file']),
+                intval($error['line'])
+            );
         }
     }
     

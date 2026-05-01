@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Monolog\Level;
 use Monolog\LogRecord;
 use Oasis\Mlib\Logging\ConsoleHandler;
