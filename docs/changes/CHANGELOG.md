@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.0.1 - 2026-05-02
+
+全文件启用 strict_types，补充测试覆盖率至 97%。详见 [3.0.1/CHANGELOG.md](3.0.1/CHANGELOG.md)。
+
 ## v3.0.0 - 2026-04-25
 
 PHP 8.2 语法现代化：静态属性类型声明、全局函数签名补全、constructor promotion + readonly、oasis/utils 升级到 ^3.0。详见 [3.0.0/CHANGELOG.md](3.0.0/CHANGELOG.md)。
