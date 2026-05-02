@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.1.0
+
+PHP 8.5 + Symfony 8.0 + PHPUnit 13.x 生态升级。详见 [3.1.0/CHANGELOG.md](3.1.0/CHANGELOG.md)。
+
 ## v3.0.2 - 2026-05-02
 
 新增 1.x → ^3.1 迁移指南。详见 [3.0.2/CHANGELOG.md](3.0.2/CHANGELOG.md)。

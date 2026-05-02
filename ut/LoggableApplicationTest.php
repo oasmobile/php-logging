@@ -89,7 +89,7 @@ class LoggableApplicationTest extends TestCase
     private function buildAppWithNoopCommand(): LoggableApplication
     {
         $app = new LoggableApplication('test', '0.0.1');
-        $app->add(
+        $app->addCommand(
             (new Command('noop'))
                 ->setCode(function (InputInterface $input, OutputInterface $output): int {
                     return Command::SUCCESS;
