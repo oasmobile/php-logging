@@ -8,14 +8,14 @@
 
 | 项目 | 1.x | ^3.1 |
 |------|-----|------|
-| PHP | >=5.x | >=8.2 |
+| PHP | >=5.x | >=8.5 |
 | monolog/monolog | ^1.17 | ^3.0 |
 | bramus/monolog-colored-line-formatter | ^2.0 | ^3.0 |
 | oasis/utils | ^1.6 | ^3.0 |
-| phpunit/phpunit（dev） | ^5.1 | ^11.0 |
-| symfony/console（dev/suggest） | ^3.0 | ^7.0 |
+| phpunit/phpunit（dev） | ^5.1 | ^13.0 |
+| symfony/console（dev/suggest） | ^3.0 | ^8.0 |
 
-升级前确认 PHP 版本 ≥ 8.2，并确保下游项目不依赖 `oasis/utils ^1.x` 或 `^2.x`。
+升级前确认 PHP 版本 ≥ 8.5，并确保下游项目不依赖 `oasis/utils ^1.x` 或 `^2.x`。
 
 ---
 
@@ -167,19 +167,19 @@ function myProcessor(LogRecord $record): LogRecord {
 | 变更点 | 1.x | ^3.1 |
 |--------|-----|------|
 | 基类 | `PHPUnit_Framework_TestCase` | `PHPUnit\Framework\TestCase` |
-| 版本 | ^5.1 | ^11.0 |
+| 版本 | ^5.1 | ^13.0 |
 
 ---
 
 ## 第 8 步：Symfony Console 升级（仅影响 LoggableApplication 用户）
 
-`symfony/console` 从 `^3.0` 升级到 `^7.0`。如果你使用 `LoggableApplication`，需确保项目中的 Symfony 组件版本兼容。
+`symfony/console` 从 `^3.0` 升级到 `^8.0`。如果你使用 `LoggableApplication`，需确保项目中的 Symfony 组件版本兼容。
 
 ---
 
 ## 快速检查清单
 
-- [ ] PHP ≥ 8.2
+- [ ] PHP ≥ 8.5
 - [ ] `composer require oasis/logging:^3.1` 无冲突
 - [ ] 全局搜索 `Logger::DEBUG`、`Logger::INFO` 等常量，替换为 `Level` enum
 - [ ] 全局搜索 `setMinLogLevel`、`setMinLogLevelForFileTrace`、`enableAutoPublishingOnUnexpectedShutdown`、`mtrace` 调用，确认参数类型
