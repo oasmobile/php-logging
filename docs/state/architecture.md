@@ -11,7 +11,7 @@ oasis/logging（MLogging）是基于 monolog/monolog 的日志封装库，提供
 | 语言 | PHP（最低 8.5） |
 | 底层日志库 | monolog/monolog ^3.0 |
 | 彩色输出 | bramus/monolog-colored-line-formatter ^3.0 |
-| 工具依赖 | oasis/utils ^3.0 |
+| 工具依赖 | oasis/utils ^3.1 |
 | 测试框架 | phpunit/phpunit ^13.0 |
 | 包管理 | Composer |
 | 命名空间 | `Oasis\Mlib\Logging` |
@@ -80,6 +80,7 @@ MLogging（静态门面）
 ## 测试策略
 
 - 框架：PHPUnit 13.x
-- 测试文件：`ut/MLoggingTest.php`、`ut/LoggableApplicationTest.php`
-- 测试方式：写入临时目录，通过文件内容正则匹配验证日志输出
+- PBT：giorgiosironi/eris ^1.1（property-based testing）
+- 测试文件：`ut/MLoggingTest.php`、`ut/LoggableApplicationTest.php`、`ut/CoverageBoostTest.php`、`ut/PropertyBasedTest.php`
+- 测试方式：写入临时目录，通过文件内容正则匹配验证日志输出；PBT 通过随机生成输入验证日志系统的不变性质
 - 运行命令：`vendor/bin/phpunit`
