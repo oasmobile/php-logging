@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.1.1
+
+oasis/utils 升级、MLogging 语法现代化、新增 PBT 测试。详见 [3.1.1/CHANGELOG.md](3.1.1/CHANGELOG.md)。
+
 ## v3.1.0
 
 PHP 8.5 + Symfony 8.0 + PHPUnit 13.x 生态升级。详见 [3.1.0/CHANGELOG.md](3.1.0/CHANGELOG.md)。

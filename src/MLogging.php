@@ -32,9 +32,7 @@ class MLogging
         self::$autoPublishingOnFatalError = true;
         if (\class_exists(CommonUtils::class) && !self::$autoPublisherRegistered) {
             register_shutdown_function(
-                function () use ($publishLevel) {
-                    self::handleUnexpectedShutdown($publishLevel);
-                }
+                fn() => self::handleUnexpectedShutdown($publishLevel)
             );
             self::$autoPublisherRegistered = true;
         }
@@ -202,7 +200,7 @@ class MLogging
                     )
                 ) {
                     $self_encountered = true;
-                    if (isset($trace['file']) && isset($trace['line'])) {
+                    if (isset($trace['file'], $trace['line'])) {
                         $last_file = $trace['file'];
                         $last_line = $trace['line'];
                     }
@@ -217,7 +215,7 @@ class MLogging
                 }
                 
                 // Found external caller frame
-                if ($passed_src && isset($trace['file']) && isset($trace['line'])) {
+                if ($passed_src && isset($trace['file'], $trace['line'])) {
                     // If we traversed src/ frames, the external caller's
                     // file/line is where the outermost src/ function was called from
                     $last_file = $trace['file'];
@@ -245,7 +243,7 @@ class MLogging
             "Exception (%s) info: %s\n" .
             "(code = #%d, at %s, %d)\n" .
             "%s\n",
-            get_class($exception),
+            $exception::class,
             $exception->getMessage(),
             $exception->getCode(),
             $exception->getFile(),

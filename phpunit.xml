@@ -9,6 +9,7 @@
             <file>ut/MLoggingTest.php</file>
             <file>ut/LoggableApplicationTest.php</file>
             <file>ut/CoverageBoostTest.php</file>
+            <file>ut/PropertyBasedTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>
